@@ -485,12 +485,10 @@ const firebaseConfig = {
   measurementId: "G-K1Z09169FH"
 };
 
-/* ══════════════════════════════════════════════════
-   UIDs con acceso de admin.
-   Déjalo vacío [] durante desarrollo — cualquier
-   cuenta tendrá acceso. Agrega UIDs reales antes
-   de hacer deploy en producción.
-   ══════════════════════════════════════════════════ */
+/* UIDs que serán administradores.
+   Crea la cuenta primero, copia el UID desde
+   Firebase Console → Authentication → Users → UID
+   y agrégalo aquí: ["uid1","uid2"] */
 const ADMIN_UIDS = ["UEJ0LyXewXXUd7Il4FZq5ffeE8u2"];
 
 const fbApp = initializeApp(firebaseConfig);

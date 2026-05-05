@@ -6,6 +6,8 @@
 <title>Lugaria — Estacionamientos GDL</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- QR Code — sin API key, genera en el navegador -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 /* ─── Reset & Variables ──────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -220,6 +222,33 @@ input,select,textarea{font-family:var(--f)}
 .sbox h3{font-family:var(--fh);font-size:19px;font-weight:700;margin-bottom:6px}
 .sbox p{font-size:12px;color:var(--muted);margin-bottom:12px}
 .codebox{font-family:var(--fh);font-size:22px;font-weight:800;letter-spacing:4px;color:var(--acc);background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.18);border-radius:var(--rsm);padding:11px 16px;display:inline-block}
+
+/* QR container */
+.qr-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin:14px 0}
+.qr-box{background:#fff;border-radius:10px;padding:10px;display:inline-block;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.qr-box canvas,.qr-box img{display:block!important}
+.qr-label{font-size:10px;color:var(--muted);text-align:center}
+.conf-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px;margin:12px 0;text-align:left}
+.conf-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;font-size:12px}
+.conf-row:last-child{margin:0}
+.conf-lbl{color:var(--muted)}
+.conf-val{font-weight:600;color:var(--text)}
+.btn-qr{background:transparent;border:1px solid var(--border);border-radius:var(--rsm);padding:7px 14px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;transition:all .15s;margin:0 auto}
+.btn-qr:hover{border-color:var(--acc);color:var(--acc)}
+.qr-toggle{overflow:hidden;transition:max-height .35s ease;max-height:0}
+.qr-toggle.open{max-height:260px}
+
+/* Cancel button on reservation items */
+.ri-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.btn-cancel-res{background:transparent;border:1px solid rgba(255,91,91,.25);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--red);transition:all .15s}
+.btn-cancel-res:hover{background:rgba(255,91,91,.1)}
+.btn-view-qr{background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--muted);transition:all .15s}
+.btn-view-qr:hover{border-color:var(--acc);color:var(--acc)}
+
+/* Cancel confirm modal */
+.cancel-warn{background:rgba(255,91,91,.07);border:1px solid rgba(255,91,91,.18);border-radius:var(--rsm);padding:11px 13px;font-size:12px;color:var(--red);margin-bottom:12px;line-height:1.5}
+.bdel{flex:1;padding:10px;background:rgba(255,91,91,.1);border:1px solid rgba(255,91,91,.2);border-radius:var(--rsm);color:var(--red);font-size:13px;font-weight:600;transition:opacity .15s}
+.bdel:hover{opacity:.8}
 
 /* Profile */
 .ph{display:flex;align-items:center;gap:12px;margin-bottom:12px}
@@ -486,6 +515,36 @@ input,select,textarea{font-family:var(--f)}
   <div class="mf">
    <button class="bcancel" onclick="closeM('vehicle')">Cancelar</button>
    <button class="bsub" onclick="doSaveVehicle()">Guardar</button>
+  </div>
+ </div>
+</div>
+
+<!-- ═══ QR FULL MODAL ═══ -->
+<div class="ov" id="modal-qr" onclick="bgX(event,'modal-qr')">
+ <div class="modal" style="max-width:340px" onclick="event.stopPropagation()">
+  <div class="mh"><h2>Comprobante de reserva</h2><button class="xb" onclick="closeM('qr')">✕</button></div>
+  <div class="mb" style="text-align:center">
+   <div class="qr-box" style="margin:0 auto 12px" id="qr-full-box"></div>
+   <div class="codebox" id="qr-full-code" style="margin-bottom:10px"></div>
+   <div class="conf-card" id="qr-full-details"></div>
+   <p style="font-size:10px;color:var(--muted);margin-top:10px">Muestra este QR al personal del estacionamiento</p>
+  </div>
+ </div>
+</div>
+
+<!-- ═══ CANCEL RESERVATION MODAL ═══ -->
+<div class="ov" id="modal-cancel-res" onclick="bgX(event,'modal-cancel-res')">
+ <div class="modal" style="max-width:380px" onclick="event.stopPropagation()">
+  <div class="mh"><h2>Cancelar reserva</h2><button class="xb" onclick="closeM('cancel-res')">✕</button></div>
+  <div class="mb">
+   <div class="cancel-warn">
+     ⚠️ Al cancelar, el lugar quedará libre nuevamente y <strong>no se realizará ningún cobro</strong>. Esta acción no se puede deshacer.
+   </div>
+   <div class="conf-card" id="cancel-details"></div>
+  </div>
+  <div class="mf">
+   <button class="bcancel" onclick="closeM('cancel-res')">Mantener reserva</button>
+   <button class="bdel" id="cancel-sub" onclick="doCancel()">Sí, cancelar</button>
   </div>
  </div>
 </div>
@@ -847,8 +906,30 @@ window.doReserve=async()=>{
       rid=ref.id;
       await updateDoc(doc(db,'parkings',pk.id),{availSpots:increment(-1)});
     }catch{}
-    S.reservations.unshift({id:rid,parkingName:pk.name,confirmCode:conf,startTime:{toDate:()=>start},durationHours:S.selDur.h,totalPrice:total,status:'active'});
-    $('resbody').innerHTML=`<div class="sbox"><div style="font-size:46px;margin-bottom:10px">✅</div><h3>¡Reserva confirmada!</h3><p>${pk.name} · ${arr} · ${S.selDur.l}</p><div class="codebox">${conf}</div><p style="margin-top:10px">Total: <strong>$${total} MXN</strong></p><p style="margin-top:6px;font-size:10px;color:var(--muted)">Presenta este código al llegar</p></div>`;
+    S.reservations.unshift({id:rid,parkingId:pk.id,parkingName:pk.name,confirmCode:conf,startTime:{toDate:()=>start},endTime:{toDate:()=>end},durationHours:S.selDur.h,totalPrice:total,vehiclePlate:veh.plate,status:'active'});
+    $('resbody').innerHTML=`
+      <div class="sbox">
+        <div style="font-size:44px;margin-bottom:8px">✅</div>
+        <h3>¡Reserva confirmada!</h3>
+        <div class="conf-card" style="text-align:left;margin-bottom:12px">
+          <div class="conf-row"><span class="conf-lbl">Estacionamiento</span><span class="conf-val">${pk.name}</span></div>
+          <div class="conf-row"><span class="conf-lbl">Vehículo</span><span class="conf-val">${veh.plate}</span></div>
+          <div class="conf-row"><span class="conf-lbl">Llegada</span><span class="conf-val">${arr}</span></div>
+          <div class="conf-row"><span class="conf-lbl">Duración</span><span class="conf-val">${S.selDur.l}</span></div>
+          <div class="conf-row"><span class="conf-lbl">Total</span><span class="conf-val" style="color:var(--acc)">$${total} MXN</span></div>
+        </div>
+        <div class="codebox" style="margin-bottom:14px">${conf}</div>
+        <button class="btn-qr" onclick="toggleQRInline('${conf}','${pk.name}','${arr}','${S.selDur.l}','$${total} MXN')">
+          <span>📱</span><span id="qr-btn-txt">Mostrar código QR</span>
+        </button>
+        <div class="qr-toggle" id="qr-inline">
+          <div class="qr-wrap">
+            <div class="qr-box" id="qr-inline-box"></div>
+            <div class="qr-label">Escanea este QR al llegar</div>
+          </div>
+        </div>
+        <p style="margin-top:10px;font-size:10px;color:var(--muted)">Guarda el código <strong>${conf}</strong> como comprobante</p>
+      </div>`;
     $('resfoot').innerHTML=`<button class="bsub" style="flex:1" onclick="closeM('reserve')">¡Listo!</button>`;
   }catch(e){st('Error: '+e.message,1);ldBtn('rsub',false);}
 };
@@ -864,13 +945,118 @@ window.renderProfile=async()=>{
     :'<div class="empt" style="padding:10px 0">Sin vehículos</div>';
   S.reservations=await loadReservations(S.user.uid);
   $('rlist').innerHTML=S.reservations.length
-    ?S.reservations.slice(0,4).map(r=>{
+    ?S.reservations.slice(0,6).map(r=>{
         const dur=DURS.find(d=>d.h===r.durationHours)?.l||(r.durationHours+'h');
         const sc={active:'sa',cancelled:'sc',completed:'se'}[r.status||'active'];
         const sl={active:'Activa',cancelled:'Cancelada',completed:'Completada'}[r.status||'active'];
-        return `<div class="ri"><div class="rit"><div class="ripk">${r.parkingName}</div><div class="spill ${sc}">${sl}</div></div><div class="rimeta">${fmtT(r.startTime)} · ${dur} · <strong>${r.confirmCode}</strong></div></div>`;
+        const isActive=r.status==='active'||(r.status==null);
+        const t=fmtT(r.startTime);
+        return `<div class="ri">
+          <div class="rit">
+            <div class="ripk">${r.parkingName}</div>
+            <div class="spill ${sc}">${sl}</div>
+          </div>
+          <div class="rimeta">${t} · ${dur} · <strong>${r.confirmCode}</strong></div>
+          ${isActive?`<div class="ri-foot">
+            <button class="btn-view-qr" onclick="openQRModal('${r.confirmCode}','${r.parkingName}','${t}','${dur}','$${r.totalPrice||0} MXN','${r.vehiclePlate||''}')">📱 Ver QR</button>
+            <button class="btn-cancel-res" onclick="openCancelModal('${r.id}','${r.parkingId||''}','${r.parkingName}','${r.confirmCode}')">Cancelar reserva</button>
+          </div>`:''}
+        </div>`;
       }).join('')
     :'<div class="empt" style="padding:10px 0">Sin reservas</div>';
+};
+
+/* ── QR Code ─────────────────────────────────────── */
+function generateQR(containerId, text) {
+  const el = $(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  try {
+    const QRC = window.QRCode;
+    if (!QRC) throw new Error('QRCode no cargado');
+    new QRC(el, {
+      text,
+      width:  160,
+      height: 160,
+      colorDark:  '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRC.CorrectLevel.M
+    });
+  } catch(e) {
+    // Fallback: show text if QRCode library not loaded
+    el.innerHTML = `<div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#333;text-align:center;padding:10px">${text}</div>`;
+  }
+}
+
+// QR inline toggle inside confirm modal
+window.toggleQRInline = (conf, pkName, arr, dur, total) => {
+  const panel = $('qr-inline');
+  const btnTxt = $('qr-btn-txt');
+  if (!panel) return;
+  const isOpen = panel.classList.toggle('open');
+  btnTxt.textContent = isOpen ? 'Ocultar QR' : 'Mostrar código QR';
+  if (isOpen) {
+    // QR content: JSON with reservation info
+    const qrData = JSON.stringify({ code: conf, parking: pkName, time: arr, duration: dur });
+    setTimeout(() => generateQR('qr-inline-box', qrData), 50);
+  }
+};
+
+// QR full modal (from profile)
+window.openQRModal = (conf, pkName, time, dur, total, plate) => {
+  $('qr-full-code').textContent = conf;
+  $('qr-full-details').innerHTML = `
+    <div class="conf-row"><span class="conf-lbl">Estacionamiento</span><span class="conf-val">${pkName}</span></div>
+    <div class="conf-row"><span class="conf-lbl">Hora</span><span class="conf-val">${time}</span></div>
+    <div class="conf-row"><span class="conf-lbl">Duración</span><span class="conf-val">${dur}</span></div>
+    ${plate ? `<div class="conf-row"><span class="conf-lbl">Vehículo</span><span class="conf-val">${plate}</span></div>` : ''}
+    <div class="conf-row"><span class="conf-lbl">Total</span><span class="conf-val" style="color:var(--acc)">${total}</span></div>`;
+  $('qr-full-box').innerHTML = '';
+  openM('qr');
+  // Generate QR after modal is visible
+  const qrData = JSON.stringify({ code: conf, parking: pkName, time, duration: dur });
+  setTimeout(() => generateQR('qr-full-box', qrData), 120);
+};
+
+/* ── Cancel reservation ──────────────────────────── */
+let _cancelId = null;
+let _cancelPkId = null;
+
+window.openCancelModal = (resId, pkId, pkName, conf) => {
+  _cancelId   = resId;
+  _cancelPkId = pkId;
+  $('cancel-details').innerHTML = `
+    <div class="conf-row"><span class="conf-lbl">Estacionamiento</span><span class="conf-val">${pkName}</span></div>
+    <div class="conf-row"><span class="conf-lbl">Código</span><span class="conf-val">${conf}</span></div>`;
+  openM('cancel-res');
+};
+
+window.doCancel = async () => {
+  if (!_cancelId) return;
+  ldBtn('cancel-sub', true);
+  try {
+    // Mark reservation as cancelled
+    await updateDoc(doc(db, 'reservations', _cancelId), {
+      status: 'cancelled',
+      cancelledAt: serverTimestamp()
+    });
+    // Restore parking availability
+    if (_cancelPkId) {
+      await updateDoc(doc(db, 'parkings', _cancelPkId), {
+        availSpots: increment(1)
+      });
+    }
+    closeM('cancel-res');
+    st('Reserva cancelada');
+    // Refresh profile list
+    await renderProfile();
+  } catch(e) {
+    st('Error al cancelar: ' + e.message, 1);
+  } finally {
+    ldBtn('cancel-sub', false);
+    _cancelId   = null;
+    _cancelPkId = null;
+  }
 };
 
 /* ── Modal helpers ───────────────────────────────── */
