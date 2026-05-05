@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lugaria Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#07090f;--s1:#0e1118;--s2:#161b27;--s3:#1e2535;--s4:#252d40;
+  --acc:#00e5a0;--acc2:#00c488;--gold:#f5c842;--red:#ff5b5b;--blue:#5b9fff;--purple:#a78bfa;
+  --text:#eef2ff;--muted:#7a85a3;--border:rgba(255,255,255,.07);
+  --r:12px;--rsm:8px;--f:'Outfit',sans-serif;--fh:'Syne',sans-serif;
+  --sw:220px;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex}
+button{cursor:pointer;font-family:var(--f);border:none}
+input,select,textarea{font-family:var(--f)}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--s4);border-radius:3px}
+
+/* ── Login gate ── */
+#login-gate{
+  position:fixed;inset:0;background:var(--bg);z-index:9000;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.login-card{
+  background:var(--s1);border:1px solid var(--border);border-radius:18px;
+  padding:32px;width:100%;max-width:360px;text-align:center;
+}
+.lc-logo{font-family:var(--fh);font-size:24px;font-weight:800;margin-bottom:4px}
+.lc-sub{font-size:12px;color:var(--muted);margin-bottom:22px}
+.bfull{width:100%;padding:11px;background:var(--acc);border:none;border-radius:var(--rsm);color:#001a0d;font-size:14px;font-weight:700;margin-top:4px;transition:opacity .15s}
+.bfull:hover{opacity:.88}
+.bfull:disabled{background:var(--s3);color:var(--muted)}
+
+/* ── Admin sidebar ── */
+#aside{
+  width:var(--sw);flex-shrink:0;height:100vh;
+  background:var(--s1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:width .25s ease;
+}
+.aside-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);overflow:hidden}
+.alogo{font-family:var(--fh);font-size:18px;font-weight:800;white-space:nowrap}
+.alog-g{color:var(--acc)}.alog-w{color:var(--text)}
+.alog-tag{display:block;font-size:9px;color:var(--muted);font-weight:400;letter-spacing:1.5px;margin-top:1px}
+.anav{flex:1;padding:10px 8px;overflow-y:auto}
+.anav-group{margin-bottom:18px}
+.anav-label{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:0 8px;margin-bottom:5px;white-space:nowrap;overflow:hidden}
+.anav-item{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;
+  border-radius:var(--rsm);cursor:pointer;font-size:13px;color:var(--muted);
+  transition:all .15s;margin-bottom:2px;white-space:nowrap;overflow:hidden;
+}
+.anav-item:hover{background:var(--s2);color:var(--text)}
+.anav-item.active{background:var(--s3);color:var(--text);font-weight:600}
+.anav-item.active .anic{color:var(--acc)}
+.anic{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.aside-foot{padding:12px 8px;border-top:1px solid var(--border);overflow:hidden}
+.user-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--rsm)}
+.uav-sm{width:28px;height:28px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#001a0d;flex-shrink:0}
+.uinfo{flex:1;min-width:0}
+.unm-sm{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uem-sm{font-size:10px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-btn{background:transparent;border:none;color:var(--muted);font-size:16px;padding:4px;border-radius:4px;flex-shrink:0}
+.logout-btn:hover{color:var(--red)}
+
+/* ── Main content ── */
+#main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0}
+#topbar{
+  height:54px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;background:var(--s1);border-bottom:1px solid var(--border);
+}
+.topbar-ttl{font-family:var(--fh);font-size:17px;font-weight:700}
+.topbar-r{display:flex;align-items:center;gap:6px}
+#content{flex:1;overflow-y:auto;padding:20px 22px}
+
+/* ── Views ── */
+.view{display:none}
+.view.active{display:block}
+
+/* ── Stat cards ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;position:relative;overflow:hidden;
+}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
+.sc-acc::before{background:var(--acc)}
+.sc-blue::before{background:var(--blue)}
+.sc-gold::before{background:var(--gold)}
+.sc-pur::before{background:var(--purple)}
+.sc-red::before{background:var(--red)}
+.sc-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:600;margin-bottom:8px}
+.sc-val{font-family:var(--fh);font-size:28px;font-weight:800;line-height:1}
+.sc-sub{font-size:10px;color:var(--muted);margin-top:4px}
+
+/* ── Section header ── */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.sh h2{font-family:var(--fh);font-size:15px;font-weight:700}
+.btn-add{
+  padding:7px 14px;background:var(--acc);color:#001a0d;border:none;
+  border-radius:22px;font-size:12px;font-weight:700;transition:opacity .15s;
+  display:flex;align-items:center;gap:5px;
+}
+.btn-add:hover{opacity:.85}
+
+/* ── Table ── */
+.tbl-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:20px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:400px}
+thead th{
+  padding:10px 14px;text-align:left;font-size:10px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.7px;
+  border-bottom:1px solid var(--border);white-space:nowrap;
+}
+tbody tr{transition:background .12s}
+tbody tr:hover{background:var(--s2)}
+tbody td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+.tb-name{font-weight:600}
+.tb-addr{font-size:11px;color:var(--muted);margin-top:2px}
+.avail-bar{display:flex;align-items:center;gap:7px}
+.mini-bar{flex:1;height:4px;background:var(--s4);border-radius:2px;overflow:hidden;min-width:40px}
+.mini-fill{height:100%;border-radius:2px;transition:width .4s}
+.tb-acts{display:flex;gap:5px;flex-wrap:wrap}
+.tba{padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;transition:opacity .15s;border:none;cursor:pointer}
+.tba:hover{opacity:.8}
+.tba-e{background:rgba(91,159,255,.12);color:var(--blue)}
+.tba-t{background:rgba(0,229,160,.1);color:var(--acc)}
+.tba-d{background:rgba(255,91,91,.1);color:var(--red)}
+.empt-row td{text-align:center;padding:28px;color:var(--muted);font-size:13px}
+
+/* ── Badges ── */
+.bdg{padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;white-space:nowrap}
+.ba{background:rgba(0,229,160,.1);color:var(--acc)}
+.bf{background:rgba(245,200,66,.1);color:var(--gold)}
+.bx{background:rgba(255,91,91,.1);color:var(--red)}
+.bact{background:rgba(0,229,160,.1);color:var(--acc)}
+.bcan{background:rgba(255,91,91,.08);color:var(--red)}
+.bcom{background:rgba(122,133,163,.1);color:var(--muted)}
+.binact{background:rgba(122,133,163,.1);color:var(--muted)}
+
+/* ── Search bar ── */
+.srch-bar{
+  display:flex;align-items:center;gap:7px;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:var(--rsm);padding:8px 11px;margin-bottom:12px;
+}
+.srch-bar input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px}
+.srch-bar input::placeholder{color:var(--muted)}
+
+/* ── Modals ── */
+.ov{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;
+  display:none;align-items:center;justify-content:center;padding:14px;
+  backdrop-filter:blur(6px);
+}
+.ov.open{display:flex}
+.modal{
+  background:var(--s1);border:1px solid var(--border);border-radius:18px;
+  width:100%;max-width:480px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 64px rgba(0,0,0,.7);
+  animation:pop .22s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+.mh{display:flex;justify-content:space-between;align-items:center;padding:18px 18px 0}
+.mh h2{font-family:var(--fh);font-size:18px;font-weight:700}
+.xb{width:28px;height:28px;background:var(--s3);border:none;border-radius:50%;color:var(--muted);font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.xb:hover{color:var(--text)}
+.mb{padding:16px}
+.mf{padding:0 16px 16px;display:flex;gap:7px}
+.fg{margin-bottom:11px}
+.fg label{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:10px 11px;background:var(--s2);border:1px solid var(--border);
+  border-radius:var(--rsm);color:var(--text);font-size:13px;outline:none;
+  transition:border-color .15s;-webkit-appearance:none;appearance:none;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--acc)}
+.fg select option{background:var(--s2)}
+.fg input::placeholder{color:var(--muted)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.sep{height:1px;background:var(--border);margin:12px 0}
+.seclbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.bcancel{flex:1;padding:10px;background:transparent;border:1px solid var(--border);border-radius:var(--rsm);color:var(--muted);font-size:13px;transition:color .15s}
+.bcancel:hover{color:var(--text)}
+.bsub{flex:2;padding:10px;background:var(--acc);border:none;border-radius:var(--rsm);color:#001a0d;font-size:13px;font-weight:700;transition:opacity .15s}
+.bsub:hover{opacity:.88}
+.bsub:disabled{background:var(--s3);color:var(--muted);opacity:1}
+.bdel{flex:1;padding:10px;background:rgba(255,91,91,.1);border:1px solid rgba(255,91,91,.2);border-radius:var(--rsm);color:var(--red);font-size:13px;font-weight:600;transition:opacity .15s}
+.bdel:hover{opacity:.8}
+.errbox{background:rgba(255,91,91,.08);border:1px solid rgba(255,91,91,.2);border-radius:var(--rsm);padding:9px 11px;font-size:12px;color:var(--red);margin-bottom:10px;display:none}
+.errbox.on{display:block}
+.info-box{background:rgba(91,159,255,.06);border:1px solid rgba(91,159,255,.15);border-radius:var(--rsm);padding:10px 12px;font-size:12px;color:var(--blue);margin-bottom:12px;line-height:1.5}
+.info-box a{color:var(--blue)}
+
+/* Loading spinner */
+.ld{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#001a0d;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Snackbar */
+#snack{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(6px);
+  background:var(--text);color:#07090f;padding:9px 18px;border-radius:22px;
+  font-size:12px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;white-space:nowrap;
+}
+#snack.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#snack.err{background:var(--red);color:#fff}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  #aside{width:52px}
+  .aside-logo{padding:13px 0;display:flex;justify-content:center}
+  .alogo,.anav-label,.anav-item span:not(.anic),.uinfo,.alog-tag{display:none}
+  .anav-item{justify-content:center;padding:10px;gap:0}
+  .aside-foot{padding:8px 0}
+  .user-row{justify-content:center;padding:8px;gap:0}
+  .logout-btn{display:none}
+  #content{padding:14px 14px}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .r2,.r3{grid-template-columns:1fr}
+  /* Hide less important columns on mobile */
+  table thead th:nth-child(3),table thead th:nth-child(4),
+  table tbody td:nth-child(3),table tbody td:nth-child(4){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN GATE ═══ -->
+<div id="login-gate">
+  <div class="login-card">
+    <div class="lc-logo"><span style="color:var(--acc)">Lug</span><span style="color:var(--text)">aria</span></div>
+    <div class="lc-sub">Panel de Administrador</div>
+    <div class="errbox" id="lerr"></div>
+    <div class="fg" style="text-align:left"><label>Correo</label><input id="lem" type="email" placeholder="admin@lugaria.mx" autocomplete="email"></div>
+    <div class="fg" style="text-align:left"><label>Contraseña</label><input id="lpw" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="bfull" id="lbtn" onclick="doLogin()" style="margin-top:8px">Iniciar sesión</button>
+    <p style="margin-top:14px;font-size:11px;color:var(--muted)">Solo cuentas con permisos de administrador.</p>
+    <a href="index.html" style="display:block;margin-top:10px;font-size:11px;color:var(--muted)">← Volver a la app</a>
+  </div>
+</div>
+
+<!-- ═══ ADMIN LAYOUT ═══ -->
+<div id="aside">
+  <div class="aside-logo">
+    <div class="alogo"><span class="alog-g">Lug</span><span class="alog-w">aria</span></div>
+    <span class="alog-tag">Admin Panel</span>
+  </div>
+  <nav class="anav">
+    <div class="anav-group">
+      <div class="anav-label">Principal</div>
+      <div class="anav-item active" id="nav-dashboard"    onclick="goto('dashboard')">   <span class="anic">📊</span><span>Dashboard</span></div>
+      <div class="anav-item"        id="nav-parkings"     onclick="goto('parkings')">    <span class="anic">🅿️</span><span>Estacionamientos</span></div>
+      <div class="anav-item"        id="nav-reservations" onclick="goto('reservations')"><span class="anic">🎫</span><span>Reservas</span></div>
+      <div class="anav-item"        id="nav-users"        onclick="goto('users')">       <span class="anic">👥</span><span>Usuarios</span></div>
+    </div>
+    <div class="anav-group">
+      <div class="anav-label">Acciones</div>
+      <div class="anav-item" onclick="openPkForm()">                          <span class="anic">➕</span><span>Nuevo estac.</span></div>
+      <div class="anav-item" onclick="window.open('index.html','_blank')">    <span class="anic">🌐</span><span>Ver app</span></div>
+    </div>
+  </nav>
+  <div class="aside-foot">
+    <div class="user-row">
+      <div class="uav-sm" id="aav">A</div>
+      <div class="uinfo">
+        <div class="unm-sm" id="anm">Admin</div>
+        <div class="uem-sm" id="aem">—</div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()" title="Cerrar sesión">🚪</button>
+    </div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <div class="topbar-ttl" id="ttl">Dashboard</div>
+    <div class="topbar-r">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--acc);display:inline-block;animation:pulse 2s infinite"></span>
+      <span style="font-size:11px;color:var(--muted);margin-left:4px">En vivo</span>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- Dashboard -->
+    <div class="view active" id="v-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card sc-acc">
+          <div class="sc-label">Estacionamientos</div>
+          <div class="sc-val" id="st-total">—</div>
+          <div class="sc-sub">registrados</div>
+        </div>
+        <div class="stat-card sc-blue">
+          <div class="sc-label">Lugares disponibles</div>
+          <div class="sc-val" id="st-avail">—</div>
+          <div class="sc-sub">ahora mismo</div>
+        </div>
+        <div class="stat-card sc-gold">
+          <div class="sc-label">Reservas activas</div>
+          <div class="sc-val" id="st-res">—</div>
+          <div class="sc-sub">en curso</div>
+        </div>
+        <div class="stat-card sc-pur">
+          <div class="sc-label">Usuarios</div>
+          <div class="sc-val" id="st-users">—</div>
+          <div class="sc-sub">registrados</div>
+        </div>
+      </div>
+      <div class="sh"><h2>Estado de estacionamientos</h2></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Nombre</th><th>Disponible</th><th>Ocupación</th><th>Precio/hr</th><th>Estado</th></tr></thead>
+          <tbody id="dash-tbl"><tr class="empt-row"><td colspan="5">Cargando…</td></tr></tbody>
+        </table>
+      </div>
+      <div class="sh"><h2>Reservas recientes</h2></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Código</th><th>Estacionamiento</th><th>Vehículo</th><th>Hora</th><th>Estado</th></tr></thead>
+          <tbody id="recent-res"><tr class="empt-row"><td colspan="5">Cargando…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Estacionamientos -->
+    <div class="view" id="v-parkings">
+      <div class="sh">
+        <h2>Estacionamientos</h2>
+        <button class="btn-add" onclick="openPkForm()">+ Nuevo</button>
+      </div>
+      <div class="srch-bar">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="pq" placeholder="Buscar nombre o dirección…" oninput="renderPkTable()">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Nombre / Dirección</th><th>Disponible</th><th>Precio</th><th>Tipo</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <tbody id="pk-tbl"><tr class="empt-row"><td colspan="6">Cargando…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Reservas -->
+    <div class="view" id="v-reservations">
+      <div class="sh"><h2>Reservas</h2></div>
+      <div class="srch-bar">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="rq" placeholder="Buscar código o estacionamiento…" oninput="renderResTable()">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Código</th><th>Estacionamiento</th><th>Vehículo</th><th>Inicio</th><th>Duración</th><th>Total</th><th>Estado</th></tr></thead>
+          <tbody id="res-tbl"><tr class="empt-row"><td colspan="7">Cargando…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Usuarios -->
+    <div class="view" id="v-users">
+      <div class="sh"><h2>Usuarios</h2></div>
+      <div class="srch-bar">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="uq" placeholder="Buscar nombre o correo…" oninput="renderUserTable()">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Registro</th></tr></thead>
+          <tbody id="user-tbl"><tr class="empt-row"><td colspan="4">Cargando…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ PARKING FORM MODAL ═══ -->
+<div class="ov" id="modal-pk-form" onclick="bgX(event,'modal-pk-form')">
+ <div class="modal" onclick="event.stopPropagation()">
+  <div class="mh"><h2 id="pkfh2">Nuevo estacionamiento</h2><button class="xb" onclick="closeM('pk-form')">✕</button></div>
+  <div class="mb">
+   <div class="info-box">
+     💡 Obtén lat/lng gratis: ve a <a href="https://www.openstreetmap.org" target="_blank">openstreetmap.org</a>, clic derecho en el mapa → "Mostrar dirección". El URL mostrará <code>lat=XX&lon=-XXX</code>.
+   </div>
+   <div class="errbox" id="pkerr"></div>
+   <div class="fg"><label>Nombre del estacionamiento *</label><input id="pk-name" type="text" placeholder="Plaza Sol"></div>
+   <div class="fg"><label>Dirección *</label><input id="pk-addr" type="text" placeholder="Av. Vallarta 1234, Guadalajara"></div>
+   <div class="r2">
+    <div class="fg"><label>Latitud *</label><input id="pk-lat" type="number" step="any" placeholder="20.6764"></div>
+    <div class="fg"><label>Longitud *</label><input id="pk-lng" type="number" step="any" placeholder="-103.3820"></div>
+   </div>
+   <div class="r3">
+    <div class="fg"><label>Lugares totales *</label><input id="pk-total" type="number" min="1" placeholder="50"></div>
+    <div class="fg"><label>Disponibles ahora *</label><input id="pk-avail" type="number" min="0" placeholder="50"></div>
+    <div class="fg"><label>Precio/hora MXN *</label><input id="pk-price" type="number" min="1" placeholder="20"></div>
+   </div>
+   <div class="r2">
+    <div class="fg"><label>Horario</label><input id="pk-hours" type="text" placeholder="6:00–22:00"></div>
+    <div class="fg"><label>Tipo</label>
+     <select id="pk-type">
+      <option value="Cubierto">Cubierto</option>
+      <option value="Al aire libre">Al aire libre</option>
+      <option value="Subterráneo">Subterráneo</option>
+     </select>
+    </div>
+   </div>
+   <div class="fg"><label>Visibilidad en app</label>
+    <select id="pk-active">
+     <option value="true">✅ Activo — visible para usuarios</option>
+     <option value="false">🚫 Inactivo — oculto</option>
+    </select>
+   </div>
+  </div>
+  <div class="mf" id="pkf-foot">
+   <button class="bcancel" onclick="closeM('pk-form')">Cancelar</button>
+   <button class="bsub" id="pk-sub" onclick="savePk()">Guardar</button>
+  </div>
+ </div>
+</div>
+
+<!-- ═══ ADJUST SPOTS MODAL ═══ -->
+<div class="ov" id="modal-adjust" onclick="bgX(event,'modal-adjust')">
+ <div class="modal" onclick="event.stopPropagation()">
+  <div class="mh"><h2>Ajustar disponibilidad</h2><button class="xb" onclick="closeM('adjust')">✕</button></div>
+  <div class="mb">
+   <p style="font-size:13px;color:var(--muted);margin-bottom:14px" id="adj-pk-name">—</p>
+   <div class="r2">
+    <div class="fg"><label>Lugares disponibles</label><input id="adj-avail" type="number" min="0"></div>
+    <div class="fg"><label>Lugares totales</label><input id="adj-total" type="number" min="1"></div>
+   </div>
+   <p style="font-size:11px;color:var(--muted);margin-top:4px">Este cambio se refleja en tiempo real en la app y el mapa.</p>
+  </div>
+  <div class="mf">
+   <button class="bcancel" onclick="closeM('adjust')">Cancelar</button>
+   <button class="bsub" id="adj-sub" onclick="doAdjust()">Actualizar</button>
+  </div>
+ </div>
+</div>
+
+<!-- ═══ DELETE CONFIRM MODAL ═══ -->
+<div class="ov" id="modal-del" onclick="bgX(event,'modal-del')">
+ <div class="modal" onclick="event.stopPropagation()">
+  <div class="mh"><h2>Confirmar eliminación</h2><button class="xb" onclick="closeM('del')">✕</button></div>
+  <div class="mb">
+   <p style="font-size:13px;color:var(--muted)">¿Eliminar <strong id="del-name" style="color:var(--text)"></strong>?<br><br>Esta acción no se puede deshacer. Las reservas existentes no se eliminarán.</p>
+  </div>
+  <div class="mf">
+   <button class="bcancel" onclick="closeM('del')">Cancelar</button>
+   <button class="bdel" id="del-sub" onclick="doDelete()">Sí, eliminar</button>
+  </div>
+ </div>
+</div>
+
+<div id="snack"></div>
+
+<script type="module">
+import { initializeApp }                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword,
+         signOut, onAuthStateChanged }               from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs,
+         doc, updateDoc, deleteDoc,
+         query, orderBy, where, onSnapshot,
+         serverTimestamp }                           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ══════════════════════════════════════════════════
+   🔥 PEGA AQUÍ TU FIREBASE CONFIG
+   Debe ser IDÉNTICO al de index.html
+   ══════════════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyB9b5kGcIAXltYazwKkrA3FW3Z3DwLMDI0",
+  authDomain: "lugaria-guadalajara-9505e.firebaseapp.com",
+  projectId: "lugaria-guadalajara-9505e",
+  storageBucket: "lugaria-guadalajara-9505e.firebasestorage.app",
+  messagingSenderId: "456373137134",
+  appId: "1:456373137134:web:f7d150c367f3ebbdeb4dff",
+  measurementId: "G-K1Z09169FH"
+};
+
+/* ══════════════════════════════════════════════════
+   UIDs con acceso de admin.
+   Déjalo vacío [] durante desarrollo — cualquier
+   cuenta tendrá acceso. Agrega UIDs reales antes
+   de hacer deploy en producción.
+   ══════════════════════════════════════════════════ */
+const ADMIN_UIDS = ["UEJ0LyXewXXUd7Il4FZq5ffeE8u2"];
+
+const fbApp = initializeApp(firebaseConfig);
+const auth  = getAuth(fbApp);
+const db    = getFirestore(fbApp);
+
+/* ── Constantes ── */
+const DURS = [
+  {l:'30 min',h:.5},{l:'1 hora',h:1},{l:'2 horas',h:2},
+  {l:'3 horas',h:3},{l:'4 horas',h:4},{l:'6 horas',h:6}
+];
+const VIEWS = {
+  dashboard:'Dashboard', parkings:'Estacionamientos',
+  reservations:'Reservas', users:'Usuarios'
+};
+
+/* ── Estado global ── */
+const S = {
+  user:null,
+  parkings:[],
+  reservations:[],
+  users:[],
+  editPkId:null,
+  delPkId:null,
+  adjPkId:null,
+  unsub:null
+};
+
+/* ── Utilidades ── */
+const $   = id => document.getElementById(id);
+const snk = (msg, err=0) => {
+  const e = $('snack');
+  e.textContent = msg;
+  e.className = 'on' + (err ? ' err' : '');
+  setTimeout(() => e.className = '', 2800);
+};
+const fmtT = ts => {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('es-MX', {day:'2-digit', month:'short'})
+       + ' ' + d.toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+};
+const sts  = (a, t) => a === 0 ? 'x' : (a / t) <= .25 ? 'f' : 'a';
+const pct  = (a, t) => Math.round((a / t) * 100);
+
+function ldBtn(id, on) {
+  const b = $(id);
+  if (!b) return;
+  if (on) { b.dataset.t = b.textContent; b.innerHTML = '<span class="ld"></span>'; b.disabled = true; }
+  else    { b.textContent = b.dataset.t || 'OK'; b.disabled = false; }
+}
+
+/* ── Auth ── */
+onAuthStateChanged(auth, user => {
+  const isAdmin = ADMIN_UIDS.length === 0 || ADMIN_UIDS.includes(user?.uid);
+  if (user && isAdmin) {
+    S.user = user;
+    $('login-gate').style.display = 'none';
+    const nm = user.displayName || user.email || 'Admin';
+    $('aav').textContent = nm[0].toUpperCase();
+    $('anm').textContent = nm;
+    $('aem').textContent = user.email;
+    boot();
+  } else if (user && !isAdmin) {
+    signOut(auth);
+    showLoginErr('Esta cuenta no tiene permisos de administrador.');
+  } else {
+    $('login-gate').style.display = 'flex';
+  }
+});
+
+function showLoginErr(msg) {
+  $('lerr').textContent = msg;
+  $('lerr').className = 'errbox on';
+}
+
+window.doLogin = async () => {
+  $('lerr').className = 'errbox';
+  ldBtn('lbtn', true);
+  try {
+    const email = $('lem').value.trim();
+    const pass  = $('lpw').value;
+    if (!email || !pass) { showLoginErr('Completa correo y contraseña'); return; }
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch (e) {
+    const msgs = {
+      'auth/user-not-found':    'Correo no registrado',
+      'auth/wrong-password':    'Contraseña incorrecta',
+      'auth/invalid-credential':'Correo o contraseña incorrectos',
+      'auth/too-many-requests': 'Demasiados intentos. Espera un momento.',
+    };
+    showLoginErr(msgs[e.code] || e.message);
+  } finally { ldBtn('lbtn', false); }
+};
+
+window.doLogout = async () => { await signOut(auth); };
+
+/* ── Boot ── */
+async function boot() {
+  startParkingsLive();
+  await Promise.all([loadReservations(), loadUsers()]);
+  updateStats();
+  renderDashRecent();
+}
+
+/* ── Navigation ── */
+window.goto = tab => {
+  // Deactivate all
+  document.querySelectorAll('.anav-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  // Activate target
+  $('v-' + tab)?.classList.add('active');
+  $('nav-' + tab)?.classList.add('active');
+  $('ttl').textContent = VIEWS[tab] || tab;
+  // Trigger renders
+  if (tab === 'parkings')     renderPkTable();
+  if (tab === 'reservations') renderResTable();
+  if (tab === 'users')        renderUserTable();
+};
+
+/* ── Parkings — live listener ── */
+function startParkingsLive() {
+  try {
+    const q = query(collection(db, 'parkings'), orderBy('name'));
+    S.unsub = onSnapshot(q, snap => {
+      S.parkings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      updateStats();
+      renderDashTable();
+      // Refresh parkings view if active
+      if ($('v-parkings').classList.contains('active')) renderPkTable();
+    }, _err => loadDemoParkings());
+  } catch { loadDemoParkings(); }
+}
+
+function loadDemoParkings() {
+  S.parkings = [
+    {id:'p1',name:'Plaza Sol',    address:'Av. Vallarta 1234',          lat:20.6764,lng:-103.3820,totalSpots:20,availSpots:14,pricePerHour:20,hours:'6:00–22:00',type:'Cubierto',      active:true},
+    {id:'p2',name:'Centro GDL',   address:'Morelos 456, Centro Hist.',   lat:20.6596,lng:-103.3496,totalSpots:30,availSpots:3, pricePerHour:15,hours:'7:00–21:00',type:'Al aire libre',active:true},
+    {id:'p3',name:'Chapultepec',  address:'Av. Chapultepec 789',         lat:20.6731,lng:-103.3744,totalSpots:50,availSpots:0, pricePerHour:18,hours:'6:00–23:00',type:'Cubierto',      active:true},
+    {id:'p4',name:'Puerta Norte', address:'Av. Américas 2100',           lat:20.6893,lng:-103.3641,totalSpots:80,availSpots:28,pricePerHour:12,hours:'24 horas',  type:'Al aire libre',active:true},
+    {id:'p5',name:'Mercado TJ',   address:'Independencia 300, Tlaq.',    lat:20.6412,lng:-103.3124,totalSpots:25,availSpots:5, pricePerHour:10,hours:'8:00–20:00',type:'Al aire libre',active:true},
+    {id:'p6',name:'Andares',      address:'Blvd. Puerta de Hierro 4965', lat:20.7255,lng:-103.4222,totalSpots:200,availSpots:87,pricePerHour:25,hours:'10:00–22:00',type:'Cubierto',  active:true},
+  ];
+  updateStats(); renderDashTable(); renderPkTable();
+}
+
+/* ── Data loaders ── */
+async function loadReservations() {
+  try {
+    const q = query(collection(db, 'reservations'), orderBy('createdAt', 'desc'));
+    S.reservations = (await getDocs(q)).docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch { S.reservations = []; }
+}
+
+async function loadUsers() {
+  try {
+    const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+    S.users = (await getDocs(q)).docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch { S.users = []; }
+}
+
+/* ── Stats ── */
+function updateStats() {
+  $('st-total').textContent = S.parkings.length;
+  $('st-avail').textContent = S.parkings.reduce((s, p) => s + (p.availSpots || 0), 0);
+  $('st-res').textContent   = S.reservations.filter(r => r.status === 'active').length;
+  $('st-users').textContent = S.users.length;
+}
+
+/* ── Dashboard tables ── */
+function renderDashTable() {
+  const t = $('dash-tbl');
+  if (!S.parkings.length) { t.innerHTML = '<tr class="empt-row"><td colspan="5">Sin estacionamientos. Agrega uno desde el panel.</td></tr>'; return; }
+  const CLR = {a:'var(--acc)', f:'var(--gold)', x:'var(--red)'};
+  const LBL = {a:'Disponible', f:'Pocas plazas', x:'Lleno'};
+  const BC  = {a:'ba', f:'bf', x:'bx'};
+  t.innerHTML = S.parkings.map(p => {
+    const s = sts(p.availSpots, p.totalSpots);
+    const pc = pct(p.availSpots, p.totalSpots);
+    return `<tr>
+      <td class="tb-name">${p.name}</td>
+      <td>${p.availSpots}/${p.totalSpots}</td>
+      <td><div class="avail-bar"><div class="mini-bar"><div class="mini-fill" style="width:${pc}%;background:${CLR[s]}"></div></div>${pc}%</div></td>
+      <td>$${p.pricePerHour}</td>
+      <td><span class="bdg ${BC[s]}">${LBL[s]}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDashRecent() {
+  const t = $('recent-res');
+  if (!S.reservations.length) { t.innerHTML = '<tr class="empt-row"><td colspan="5">Sin reservas aún</td></tr>'; return; }
+  const SC = {active:'bact', cancelled:'bcan', completed:'bcom'};
+  const SL = {active:'Activa', cancelled:'Cancelada', completed:'Completada'};
+  t.innerHTML = S.reservations.slice(0, 8).map(r => `<tr>
+    <td><strong>${r.confirmCode || '—'}</strong></td>
+    <td>${r.parkingName || '—'}</td>
+    <td>${r.vehiclePlate || '—'}</td>
+    <td>${fmtT(r.startTime)}</td>
+    <td><span class="bdg ${SC[r.status] || 'bact'}">${SL[r.status] || r.status || 'Activa'}</span></td>
+  </tr>`).join('');
+}
+
+/* ── Parkings table ── */
+window.renderPkTable = () => {
+  const q  = ($('pq')?.value || '').toLowerCase();
+  const items = S.parkings.filter(p =>
+    !q || p.name.toLowerCase().includes(q) || (p.address || '').toLowerCase().includes(q)
+  );
+  const t = $('pk-tbl');
+  if (!items.length) { t.innerHTML = '<tr class="empt-row"><td colspan="6">Sin resultados</td></tr>'; return; }
+  const BC = {a:'ba', f:'bf', x:'bx'};
+  t.innerHTML = items.map(p => {
+    const s  = sts(p.availSpots, p.totalSpots);
+    const as = p.active !== false
+      ? '<span class="bdg bact">Activo</span>'
+      : '<span class="bdg binact">Inactivo</span>';
+    // Escape name for onclick attribute
+    const safeName = (p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    return `<tr>
+      <td><div class="tb-name">${p.name}</div><div class="tb-addr">${p.address || ''}</div></td>
+      <td>${p.availSpots}/${p.totalSpots}</td>
+      <td>$${p.pricePerHour}/hr</td>
+      <td>${p.type || '—'}</td>
+      <td>${as}</td>
+      <td>
+        <div class="tb-acts">
+          <button class="tba tba-e" onclick="editPk('${p.id}')">✏️ Editar</button>
+          <button class="tba tba-t" onclick="openAdjust('${p.id}')">🔧 Ajustar</button>
+          <button class="tba tba-d" onclick="confirmDel('${p.id}','${safeName}')">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+};
+
+/* ── Reservations table ── */
+window.renderResTable = () => {
+  const q = ($('rq')?.value || '').toLowerCase();
+  const items = S.reservations.filter(r =>
+    !q || (r.confirmCode || '').toLowerCase().includes(q) || (r.parkingName || '').toLowerCase().includes(q)
+  );
+  const t = $('res-tbl');
+  if (!items.length) { t.innerHTML = '<tr class="empt-row"><td colspan="7">Sin reservas</td></tr>'; return; }
+  const SC = {active:'bact', cancelled:'bcan', completed:'bcom'};
+  const SL = {active:'Activa', cancelled:'Cancelada', completed:'Completada'};
+  t.innerHTML = items.map(r => {
+    const dur = DURS.find(d => d.h === r.durationHours)?.l || (r.durationHours ? r.durationHours + 'h' : '—');
+    return `<tr>
+      <td><strong>${r.confirmCode || '—'}</strong></td>
+      <td>${r.parkingName || '—'}</td>
+      <td>${r.vehiclePlate || '—'}</td>
+      <td>${fmtT(r.startTime)}</td>
+      <td>${dur}</td>
+      <td>$${r.totalPrice || 0}</td>
+      <td><span class="bdg ${SC[r.status] || 'bact'}">${SL[r.status] || r.status || 'Activa'}</span></td>
+    </tr>`;
+  }).join('');
+};
+
+/* ── Users table ── */
+window.renderUserTable = () => {
+  const q = ($('uq')?.value || '').toLowerCase();
+  const items = S.users.filter(u =>
+    !q || (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)
+  );
+  const t = $('user-tbl');
+  if (!items.length) { t.innerHTML = '<tr class="empt-row"><td colspan="4">Sin usuarios registrados aún</td></tr>'; return; }
+  t.innerHTML = items.map(u => `<tr>
+    <td><strong>${u.name || '—'}</strong></td>
+    <td>${u.email || '—'}</td>
+    <td>${u.phone || '—'}</td>
+    <td>${fmtT(u.createdAt)}</td>
+  </tr>`).join('');
+};
+
+/* ── Parking CRUD ── */
+function clearPkForm() {
+  ['pk-name','pk-addr','pk-lat','pk-lng','pk-total','pk-avail','pk-price','pk-hours'].forEach(id => {
+    if ($(id)) $(id).value = '';
+  });
+  $('pk-type').value   = 'Cubierto';
+  $('pk-active').value = 'true';
+  $('pkerr').className = 'errbox';
+}
+
+function openPkForm() {
+  S.editPkId = null;
+  $('pkfh2').textContent = 'Nuevo estacionamiento';
+  clearPkForm();
+  $('pkf-foot').innerHTML = `
+    <button class="bcancel" onclick="closeM('pk-form')">Cancelar</button>
+    <button class="bsub" id="pk-sub" onclick="savePk()">Guardar</button>`;
+  openM('pk-form');
+}
+window.openPkForm = openPkForm;
+
+window.editPk = id => {
+  const pk = S.parkings.find(p => p.id === id);
+  if (!pk) return;
+  S.editPkId = id;
+  $('pkfh2').textContent   = 'Editar estacionamiento';
+  $('pk-name').value        = pk.name        || '';
+  $('pk-addr').value        = pk.address     || '';
+  $('pk-lat').value         = pk.lat         || '';
+  $('pk-lng').value         = pk.lng         || '';
+  $('pk-total').value       = pk.totalSpots  || '';
+  $('pk-avail').value       = pk.availSpots  || '';
+  $('pk-price').value       = pk.pricePerHour|| '';
+  $('pk-hours').value       = pk.hours       || '';
+  $('pk-type').value        = pk.type        || 'Cubierto';
+  $('pk-active').value      = String(pk.active !== false);
+  $('pkerr').className      = 'errbox';
+  $('pkf-foot').innerHTML   = `
+    <button class="bcancel" onclick="closeM('pk-form')">Cancelar</button>
+    <button class="bsub" id="pk-sub" onclick="savePk()">Guardar cambios</button>`;
+  openM('pk-form');
+};
+
+window.savePk = async () => {
+  const name  = $('pk-name').value.trim();
+  const addr  = $('pk-addr').value.trim();
+  const lat   = parseFloat($('pk-lat').value);
+  const lng   = parseFloat($('pk-lng').value);
+  const total = parseInt($('pk-total').value);
+  const avail = parseInt($('pk-avail').value);
+  const price = parseFloat($('pk-price').value);
+
+  if (!name || !addr || isNaN(lat) || isNaN(lng) || isNaN(total) || isNaN(avail) || isNaN(price)) {
+    $('pkerr').textContent = 'Completa todos los campos marcados con *';
+    $('pkerr').className   = 'errbox on';
+    return;
+  }
+  if (avail > total) {
+    $('pkerr').textContent = 'Los disponibles no pueden ser más que el total';
+    $('pkerr').className   = 'errbox on';
+    return;
+  }
+  ldBtn('pk-sub', true);
+  try {
+    const data = {
+      name, address: addr, lat, lng,
+      totalSpots: total, availSpots: avail,
+      pricePerHour: price,
+      hours:  $('pk-hours').value.trim() || '6:00–22:00',
+      type:   $('pk-type').value,
+      active: $('pk-active').value === 'true',
+      city:   'Guadalajara',
+      updatedAt: serverTimestamp()
+    };
+    if (S.editPkId) {
+      await updateDoc(doc(db, 'parkings', S.editPkId), data);
+      snk('Estacionamiento actualizado ✓');
+    } else {
+      data.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'parkings'), data);
+      snk('Estacionamiento creado ✓');
+    }
+    closeM('pk-form');
+  } catch (e) {
+    $('pkerr').textContent = 'Error al guardar: ' + e.message;
+    $('pkerr').className   = 'errbox on';
+  } finally { ldBtn('pk-sub', false); }
+};
+
+/* ── Adjust availability ── */
+window.openAdjust = id => {
+  const pk = S.parkings.find(p => p.id === id);
+  if (!pk) return;
+  S.adjPkId = id;
+  $('adj-pk-name').textContent = `${pk.name} — actualmente ${pk.availSpots}/${pk.totalSpots} lugares`;
+  $('adj-avail').value         = pk.availSpots;
+  $('adj-total').value         = pk.totalSpots;
+  openM('adjust');
+};
+
+window.doAdjust = async () => {
+  const avail = parseInt($('adj-avail').value);
+  const total = parseInt($('adj-total').value);
+  if (isNaN(avail) || isNaN(total) || avail < 0 || total < 1 || avail > total) {
+    snk('Valores inválidos', 1); return;
+  }
+  ldBtn('adj-sub', true);
+  try {
+    await updateDoc(doc(db, 'parkings', S.adjPkId), {
+      availSpots: avail, totalSpots: total, updatedAt: serverTimestamp()
+    });
+    snk('Disponibilidad actualizada ✓');
+    closeM('adjust');
+  } catch (e) { snk('Error: ' + e.message, 1); }
+  finally { ldBtn('adj-sub', false); }
+};
+
+/* ── Delete parking ── */
+window.confirmDel = (id, name) => {
+  S.delPkId = id;
+  $('del-name').textContent = name;
+  openM('del');
+};
+window.doDelete = async () => {
+  ldBtn('del-sub', true);
+  try {
+    await deleteDoc(doc(db, 'parkings', S.delPkId));
+    snk('Estacionamiento eliminado');
+    closeM('del');
+  } catch (e) { snk('Error: ' + e.message, 1); }
+  finally { ldBtn('del-sub', false); }
+};
+
+/* ── Modal helpers ── */
+window.openM  = n => { const el = $('modal-' + n); if (el) el.classList.add('open'); };
+window.closeM = n => { const el = $('modal-' + n); if (el) el.classList.remove('open'); };
+window.bgX    = (e, id) => { if (e.target.id === id) closeM(id.replace('modal-', '')); };
+</script>
+</body>
+</html>

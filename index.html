@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Lugaria — Estacionamientos GDL</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── Reset & Variables ──────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#07090f;--s1:#0e1118;--s2:#161b27;--s3:#1e2535;--s4:#252d40;
+  --acc:#00e5a0;--acc2:#00c488;--gold:#f5c842;--red:#ff5b5b;--blue:#5b9fff;
+  --text:#eef2ff;--muted:#7a85a3;--border:rgba(255,255,255,.07);
+  --r:14px;--rsm:8px;--f:'Outfit',sans-serif;--fh:'Syne',sans-serif;
+  --hh:56px;   /* header height */
+  --nb:60px;   /* mobile nav bar height */
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--f);background:var(--bg);color:var(--text)}
+button{cursor:pointer;font-family:var(--f);border:none}
+input,select,textarea{font-family:var(--f)}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--s4);border-radius:3px}
+
+/* ─── Header ─────────────────────────────────────── */
+#hdr{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:var(--hh);display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;
+  background:rgba(7,9,15,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:var(--fh);font-size:20px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:baseline;gap:2px}
+.lg{color:var(--acc)}.lw{color:var(--text)}
+.ltag{font-size:9px;color:var(--muted);font-weight:400;letter-spacing:1.5px;margin-left:3px}
+.hdr-r{display:flex;align-items:center;gap:6px}
+.btn{padding:7px 15px;border-radius:22px;font-size:12px;font-weight:500;border:none;transition:all .18s;white-space:nowrap}
+.btng{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btng:hover,.btng:active{color:var(--text);border-color:rgba(255,255,255,.2)}
+.btna{background:var(--acc);color:#001a0d;font-weight:700}
+.btna:hover,.btna:active{background:var(--acc2)}
+.u-chip{display:flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;background:var(--s2);border:1px solid var(--border);border-radius:22px;cursor:pointer}
+.uav{width:27px;height:27px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#001a0d;flex-shrink:0}
+.unm{font-size:12px;font-weight:500}
+.admbdg{padding:2px 7px;background:rgba(245,200,66,.12);color:var(--gold);border:1px solid rgba(245,200,66,.2);border-radius:10px;font-size:10px;font-weight:700}
+
+/* ─── App shell ──────────────────────────────────── */
+#app{
+  position:fixed;top:var(--hh);left:0;right:0;bottom:0;
+  display:flex;
+}
+
+/* ─── Map ────────────────────────────────────────── */
+#map-wrap{flex:1;position:relative;min-width:0}
+#map{width:100%;height:100%}
+
+/* ─── Sidebar (desktop) ──────────────────────────── */
+#sidebar{
+  width:300px;flex-shrink:0;
+  background:var(--s1);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:transform .3s ease;
+}
+.sbh{padding:13px 13px 0}
+.sbttl{font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:8px}
+.sbsrch{display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);padding:8px 10px;margin-bottom:7px}
+.sbsrch input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px}
+.sbsrch input::placeholder{color:var(--muted)}
+.chips{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
+.chip{padding:4px 9px;border-radius:18px;border:1px solid var(--border);font-size:10px;font-weight:500;color:var(--muted);background:transparent;transition:all .15s}
+.chip.ca{background:var(--acc);color:#001a0d;border-color:var(--acc);font-weight:700}
+.chip.cf{background:var(--gold);color:#1a1200;border-color:var(--gold);font-weight:700}
+.chip.cx{background:var(--red);color:#fff;border-color:var(--red);font-weight:700}
+.divl{height:1px;background:var(--border)}
+.sblist{flex:1;overflow-y:auto}
+.sblgd{padding:8px 13px;border-top:1px solid var(--border);display:flex;gap:10px}
+.leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
+.ldot{width:6px;height:6px;border-radius:50%}
+
+/* ─── Parking card ───────────────────────────────── */
+.pkc{padding:12px 13px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;position:relative}
+.pkc:hover,.pkc.sel{background:var(--s2)}
+.pkc.sel::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);border-radius:0 2px 2px 0}
+.pkct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px}
+.pkn{font-size:13px;font-weight:600}
+.bdg{padding:2px 7px;border-radius:9px;font-size:9px;font-weight:700}
+.ba{background:rgba(0,229,160,.1);color:var(--acc)}
+.bf{background:rgba(245,200,66,.1);color:var(--gold)}
+.bx{background:rgba(255,91,91,.1);color:var(--red)}
+.pka{font-size:11px;color:var(--muted);margin-bottom:6px}
+.pkrow{display:flex;gap:10px;margin-bottom:7px}
+.pkst{font-size:10px;color:var(--muted)}
+.pkst strong{color:var(--text);font-weight:600}
+.bar{height:3px;background:var(--s4);border-radius:2px;margin-bottom:8px;overflow:hidden}
+.barf{height:100%;border-radius:2px;transition:width .5s}
+.resbtn{width:100%;padding:8px;background:var(--acc);color:#001a0d;border:none;border-radius:var(--rsm);font-size:11px;font-weight:700;transition:opacity .15s}
+.resbtn:hover,.resbtn:active{opacity:.85}
+.resbtn:disabled{background:var(--s3);color:var(--muted);opacity:1;cursor:not-allowed}
+.empt{padding:26px 13px;text-align:center;color:var(--muted);font-size:12px}
+
+/* ─── Mobile bottom sheet ────────────────────────── */
+#bsheet{
+  display:none;
+  position:fixed;bottom:var(--nb);left:0;right:0;z-index:300;
+  background:var(--s1);border-top:1px solid var(--border);
+  border-radius:18px 18px 0 0;
+  max-height:60vh;overflow-y:auto;
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+#bsheet.open{transform:translateY(0)}
+.bsh-handle{width:36px;height:4px;background:var(--s4);border-radius:2px;margin:10px auto 6px}
+.bsh-head{display:flex;justify-content:space-between;align-items:center;padding:0 14px 10px}
+.bsh-ttl{font-family:var(--fh);font-size:14px;font-weight:700}
+.bsh-x{background:transparent;border:none;color:var(--muted);font-size:20px;line-height:1;padding:0}
+
+/* ─── Mobile nav bar ─────────────────────────────── */
+#mnav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:400;
+  height:var(--nb);
+  background:rgba(7,9,15,.95);backdrop-filter:blur(16px);
+  border-top:1px solid var(--border);
+  align-items:center;justify-content:space-around;
+  padding:0 4px;
+}
+.mnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;background:transparent;border:none;color:var(--muted);font-size:10px;font-weight:500;border-radius:10px;transition:all .15s;flex:1}
+.mnav-btn svg{width:20px;height:20px}
+.mnav-btn.active{color:var(--acc)}
+.mnav-btn.active svg{stroke:var(--acc)}
+
+/* ─── Map search bar (mobile) ────────────────────── */
+#msrch{
+  display:none;
+  position:absolute;top:10px;left:10px;right:10px;z-index:200;
+}
+.msrch-inner{display:flex;align-items:center;gap:8px;background:rgba(14,17,24,.95);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:22px;padding:9px 14px}
+.msrch-inner input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px}
+.msrch-inner input::placeholder{color:var(--muted)}
+.msrch-lbtn{background:transparent;border:none;color:var(--muted);font-size:18px;padding:0}
+
+/* ─── Overlays / Modals ──────────────────────────── */
+.ov{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;
+  display:none;align-items:center;justify-content:center;padding:14px;
+  backdrop-filter:blur(6px);
+}
+.ov.open{display:flex}
+.modal{
+  background:var(--s1);border:1px solid var(--border);border-radius:18px;
+  width:100%;max-width:420px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 64px rgba(0,0,0,.7);
+  animation:pop .22s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+.mh{display:flex;justify-content:space-between;align-items:center;padding:18px 18px 0}
+.mh h2{font-family:var(--fh);font-size:18px;font-weight:700}
+.xb{width:29px;height:29px;background:var(--s3);border:none;border-radius:50%;color:var(--muted);font-size:14px;display:flex;align-items:center;justify-content:center}
+.mb{padding:16px}
+.mf{padding:0 16px 16px;display:flex;gap:7px}
+.tabrow{display:flex;background:var(--s2);border-radius:var(--rsm);padding:3px;gap:3px;margin-bottom:13px}
+.tab{flex:1;padding:8px;background:transparent;border:none;color:var(--muted);font-size:12px;font-weight:500;border-radius:6px;transition:all .15s}
+.tab.on{background:var(--s4);color:var(--text);font-weight:600}
+.fg{margin-bottom:11px}
+.fg label{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:10px 11px;background:var(--s2);border:1px solid var(--border);
+  border-radius:var(--rsm);color:var(--text);font-size:13px;outline:none;
+  transition:border-color .15s;-webkit-appearance:none;appearance:none;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--acc)}
+.fg select option{background:var(--s2)}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sep{height:1px;background:var(--border);margin:11px 0}
+.seclbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.bcancel{flex:1;padding:11px;background:transparent;border:1px solid var(--border);border-radius:var(--rsm);color:var(--muted);font-size:13px}
+.bsub{flex:2;padding:11px;background:var(--acc);border:none;border-radius:var(--rsm);color:#001a0d;font-size:13px;font-weight:700}
+.bsub:disabled{background:var(--s3);color:var(--muted)}
+.errbox{background:rgba(255,91,91,.08);border:1px solid rgba(255,91,91,.2);border-radius:var(--rsm);padding:9px 11px;font-size:12px;color:var(--red);margin-bottom:10px;display:none}
+.errbox.on{display:block}
+
+/* Vehicle item */
+.vi{display:flex;align-items:center;gap:9px;padding:9px;background:var(--s2);border-radius:var(--rsm);margin-bottom:7px;border:1px solid var(--border)}
+.viic{width:36px;height:36px;background:var(--s3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.vipl{font-weight:700;font-size:13px;letter-spacing:.8px}
+.vidc{font-size:10px;color:var(--muted)}
+.vdel{margin-left:auto;background:transparent;border:none;color:var(--muted);font-size:14px;padding:4px}
+.vdel:hover{color:var(--red)}
+.addv{width:100%;padding:10px;background:transparent;border:1.5px dashed var(--border);border-radius:var(--rsm);color:var(--muted);font-size:12px;transition:all .15s}
+.addv:hover,.addv:active{border-color:var(--acc);color:var(--acc)}
+
+/* Slots */
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px}
+.slot{padding:8px 4px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);font-size:11px;font-weight:500;text-align:center;transition:all .15s;color:var(--text)}
+.slot:hover,.slot:active{border-color:var(--acc);color:var(--acc)}
+.slot.on{background:rgba(0,229,160,.1);border-color:var(--acc);color:var(--acc);font-weight:700}
+
+/* Pk detail */
+.pkdet{background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);padding:11px;margin-bottom:11px}
+.pkdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pkdr:last-child{margin:0}
+.pdl{font-size:11px;color:var(--muted)}
+.pdv{font-size:12px;font-weight:600}
+
+/* Reservation item */
+.ri{background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);padding:11px;margin-bottom:7px}
+.rit{display:flex;justify-content:space-between;margin-bottom:4px}
+.ripk{font-weight:600;font-size:12px}
+.rimeta{font-size:10px;color:var(--muted)}
+.spill{padding:2px 7px;border-radius:8px;font-size:9px;font-weight:700}
+.sa{background:rgba(0,229,160,.1);color:var(--acc)}
+.sc{background:rgba(255,91,91,.08);color:var(--red)}
+.se{background:rgba(122,133,163,.1);color:var(--muted)}
+
+/* Success */
+.sbox{text-align:center;padding:18px 8px}
+.sbox h3{font-family:var(--fh);font-size:19px;font-weight:700;margin-bottom:6px}
+.sbox p{font-size:12px;color:var(--muted);margin-bottom:12px}
+.codebox{font-family:var(--fh);font-size:22px;font-weight:800;letter-spacing:4px;color:var(--acc);background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.18);border-radius:var(--rsm);padding:11px 16px;display:inline-block}
+
+/* Profile */
+.ph{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.pav{width:50px;height:50px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#001a0d;font-family:var(--fh);flex-shrink:0}
+.pname{font-size:16px;font-weight:700}
+.pemail{font-size:11px;color:var(--muted)}
+.mi{display:flex;align-items:center;gap:9px;padding:9px;border-radius:var(--rsm);cursor:pointer;font-size:13px;transition:background .15s}
+.mi:hover,.mi:active{background:var(--s2)}
+.miic{width:32px;height:32px;border-radius:8px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:13px}
+
+/* Loading */
+.ld{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#001a0d;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Snackbar */
+#snack{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(6px);
+  background:var(--text);color:#07090f;padding:9px 18px;border-radius:22px;
+  font-size:12px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;white-space:nowrap;max-width:90vw;text-align:center;
+}
+#snack.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#snack.err{background:var(--red);color:#fff}
+
+/* Leaflet overrides */
+.leaflet-popup-content-wrapper{background:var(--s1)!important;border:1px solid var(--border)!important;border-radius:10px!important;box-shadow:0 4px 24px rgba(0,0,0,.55)!important;color:var(--text)!important}
+.leaflet-popup-tip{background:var(--s1)!important}
+.leaflet-popup-content{margin:10px 13px!important;font-family:'Outfit',sans-serif!important}
+.leaflet-control-zoom a{background:var(--s2)!important;color:var(--text)!important;border-color:var(--border)!important}
+.leaflet-control-zoom a:hover{background:var(--s3)!important}
+.leaflet-attribution-flag{display:none!important}
+.leaflet-control-attribution{background:rgba(7,9,15,.7)!important;color:var(--muted)!important;font-size:9px!important}
+.leaflet-control-attribution a{color:var(--muted)!important}
+.pop-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:3px;color:var(--text)}
+.pop-info{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5}
+.pop-btn{width:100%;padding:8px;background:var(--acc);color:#001a0d;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif}
+.pop-btn:disabled{background:var(--s3);color:var(--muted);cursor:not-allowed}
+.lf-pin{cursor:pointer}
+.pin-box{background:var(--s1);border-radius:10px;padding:6px 9px;min-width:84px;border-width:2px;border-style:solid;box-shadow:0 4px 18px rgba(0,0,0,.6);font-family:'Outfit',sans-serif}
+.pin-box.a{border-color:#00e5a0}.pin-box.f{border-color:#f5c842}.pin-box.x{border-color:#ff5b5b}
+.pb-name{font-size:10px;font-weight:600;color:#eef2ff;margin-bottom:1px;white-space:nowrap}
+.pb-num{font-size:19px;font-weight:800;line-height:1;font-family:'Syne',sans-serif}
+.pb-num.a{color:#00e5a0}.pb-num.f{color:#f5c842}.pb-num.x{color:#ff5b5b}
+.pb-sub{font-size:9px;color:#7a85a3}
+.pin-tip{width:0;height:0;border-left:6px solid transparent;border-right:0;margin-left:auto}
+.pin-tip.a,.pin-tip.f,.pin-tip.x{border-top:9px solid #0e1118}
+
+/* ─── Responsive breakpoint ──────────────────────── */
+@media(max-width:700px){
+  #sidebar{display:none}
+  #bsheet{display:block}
+  #mnav{display:flex}
+  #msrch{display:block}
+  #snack{bottom:calc(var(--nb) + 12px)}
+  .leaflet-control-zoom{display:none}
+  /* On mobile, app fills to bottom nav */
+  #app{bottom:var(--nb)}
+}
+@media(min-width:701px){
+  #mnav{display:none!important}
+  #bsheet{display:none!important}
+  #msrch{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="hdr">
+  <div class="logo"><span class="lg">Lug</span><span class="lw">aria</span><span class="ltag">GDL</span></div>
+  <div class="hdr-r">
+    <div id="hg">
+      <button class="btn btng" style="font-size:11px;padding:6px 12px" onclick="openM('auth','login')">Entrar</button>
+      <button class="btn btna" style="font-size:11px;padding:6px 12px" onclick="openM('auth','register')">Registro</button>
+    </div>
+    <div id="hu" style="display:none;align-items:center;gap:6px">
+      <span class="admbdg" id="abadge" style="display:none">Admin</span>
+      <div class="u-chip" onclick="openM('profile')">
+        <div class="uav" id="uav">?</div>
+        <span class="unm" id="unm">Usuario</span>
+        <span style="color:var(--muted);font-size:9px;margin-left:1px">▾</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- Map -->
+  <div id="map-wrap">
+    <!-- Mobile search bar over map -->
+    <div id="msrch">
+      <div class="msrch-inner">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="mq" placeholder="Buscar estacionamiento…" oninput="renderList();syncMobileList()">
+        <button class="msrch-lbtn" onclick="openSheet()">☰</button>
+      </div>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <!-- Sidebar (desktop) -->
+  <div id="sidebar">
+    <div class="sbh">
+      <div class="sbttl">Estacionamientos · GDL</div>
+      <div class="sbsrch">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="dq" placeholder="Buscar colonia o nombre…" oninput="renderList()">
+      </div>
+      <div class="chips" id="dchips">
+        <button class="chip ca" data-f="all"   onclick="setF('all',this)">Todos</button>
+        <button class="chip"    data-f="avail"  onclick="setF('avail',this)">Disponibles</button>
+        <button class="chip"    data-f="few"    onclick="setF('few',this)">Pocas plazas</button>
+        <button class="chip"    data-f="full"   onclick="setF('full',this)">Llenos</button>
+      </div>
+    </div>
+    <div class="divl"></div>
+    <div class="sblist" id="dlist"><div class="empt">Cargando…</div></div>
+    <div class="sblgd">
+      <div class="leg"><div class="ldot" style="background:var(--acc)"></div>Disponible</div>
+      <div class="leg"><div class="ldot" style="background:var(--gold)"></div>Pocas</div>
+      <div class="leg"><div class="ldot" style="background:var(--red)"></div>Lleno</div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM SHEET -->
+<div id="bsheet">
+  <div class="bsh-handle"></div>
+  <div class="bsh-head">
+    <div class="bsh-ttl">Estacionamientos</div>
+    <button class="bsh-x" onclick="closeSheet()">×</button>
+  </div>
+  <div style="padding:0 12px 8px">
+    <div class="chips" id="mchips">
+      <button class="chip ca" data-f="all"   onclick="setF('all',this,true)">Todos</button>
+      <button class="chip"    data-f="avail"  onclick="setF('avail',this,true)">Disponibles</button>
+      <button class="chip"    data-f="few"    onclick="setF('few',this,true)">Pocas</button>
+      <button class="chip"    data-f="full"   onclick="setF('full',this,true)">Llenos</button>
+    </div>
+  </div>
+  <div class="divl"></div>
+  <div class="sblist" id="mlist" style="max-height:42vh"></div>
+</div>
+
+<!-- MOBILE NAV BAR -->
+<div id="mnav">
+  <button class="mnav-btn active" id="mn-map" onclick="mnavGo('map')">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 7l6-4 6 4 6-4v14l-6 4-6-4-6 4V7z"/></svg>
+    Mapa
+  </button>
+  <button class="mnav-btn" id="mn-list" onclick="mnavGo('list')">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+    Lista
+  </button>
+  <button class="mnav-btn" id="mn-profile" onclick="mnavGo('profile-btn')">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    <span id="mn-plbl">Perfil</span>
+  </button>
+</div>
+
+<!-- ═══ AUTH MODAL ═══ -->
+<div class="ov" id="modal-auth" onclick="bgX(event,'modal-auth')">
+ <div class="modal" onclick="event.stopPropagation()">
+  <div class="mh"><h2 id="ah2">Iniciar sesión</h2><button class="xb" onclick="closeM('auth')">✕</button></div>
+  <div class="mb">
+   <div class="tabrow">
+    <button class="tab on" id="tin"  onclick="swTab('login')">Entrar</button>
+    <button class="tab"    id="treg" onclick="swTab('register')">Registrarse</button>
+   </div>
+   <div class="errbox" id="aerr"></div>
+   <!-- Login -->
+   <div id="fl">
+    <div class="fg"><label>Correo</label><input id="le" type="email" placeholder="tucorreo@gmail.com" autocomplete="email"></div>
+    <div class="fg"><label>Contraseña</label><input id="lp" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+   </div>
+   <!-- Register -->
+   <div id="fr" style="display:none">
+    <div class="r2">
+     <div class="fg"><label>Nombre</label><input id="rn" type="text" placeholder="Juan" autocomplete="given-name"></div>
+     <div class="fg"><label>Apellido</label><input id="rl" type="text" placeholder="Díaz" autocomplete="family-name"></div>
+    </div>
+    <div class="fg"><label>Correo</label><input id="re" type="email" placeholder="tucorreo@gmail.com" autocomplete="email"></div>
+    <div class="fg"><label>Teléfono (opcional)</label><input id="rph" type="tel" placeholder="+52 33 1234 5678" autocomplete="tel"></div>
+    <div class="fg"><label>Contraseña</label><input id="rp" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"></div>
+    <div class="sep"></div>
+    <div class="seclbl">Primer vehículo (opcional)</div>
+    <div class="r2">
+     <div class="fg"><label>Placas</label><input id="rvpl" type="text" placeholder="ABC-123" style="text-transform:uppercase"></div>
+     <div class="fg"><label>Tipo</label>
+      <select id="rvtp"><option value="auto">🚗 Auto</option><option value="suv">🚙 SUV</option><option value="moto">🏍️ Moto</option><option value="camion">🚐 Camión</option></select>
+     </div>
+    </div>
+    <div class="r2">
+     <div class="fg"><label>Marca</label><input id="rvbr" type="text" placeholder="Nissan"></div>
+     <div class="fg"><label>Color</label><input id="rvcl" type="text" placeholder="Gris"></div>
+    </div>
+   </div>
+  </div>
+  <div class="mf">
+   <button class="bcancel" onclick="closeM('auth')">Cancelar</button>
+   <button class="bsub" id="asub" onclick="doAuth()">Entrar</button>
+  </div>
+ </div>
+</div>
+
+<!-- ═══ RESERVE MODAL ═══ -->
+<div class="ov" id="modal-reserve" onclick="bgX(event,'modal-reserve')">
+ <div class="modal" onclick="event.stopPropagation()">
+  <div class="mh"><h2>Reservar lugar</h2><button class="xb" onclick="closeM('reserve')">✕</button></div>
+  <div class="mb" id="resbody"></div>
+  <div class="mf" id="resfoot">
+   <button class="bcancel" onclick="closeM('reserve')">Cancelar</button>
+   <button class="bsub" id="rsub" onclick="doReserve()">Confirmar</button>
+  </div>
+ </div>
+</div>
+
+<!-- ═══ PROFILE MODAL ═══ -->
+<div class="ov" id="modal-profile" onclick="bgX(event,'modal-profile')">
+ <div class="modal" onclick="event.stopPropagation()">
+  <div class="mh"><h2>Mi perfil</h2><button class="xb" onclick="closeM('profile')">✕</button></div>
+  <div class="mb">
+   <div class="ph">
+    <div class="pav" id="pav">?</div>
+    <div><div class="pname" id="pnm">—</div><div class="pemail" id="pem">—</div></div>
+   </div>
+   <div class="sep"></div>
+   <div class="seclbl">Mis vehículos</div>
+   <div id="vlist"></div>
+   <button class="addv" onclick="closeM('profile');openM('vehicle')">+ Agregar vehículo</button>
+   <div class="sep"></div>
+   <div class="seclbl">Reservas recientes</div>
+   <div id="rlist"></div>
+   <div class="sep"></div>
+   <div class="mi" id="adminlink" style="display:none" onclick="window.open('admin.html','_blank')">
+    <div class="miic" style="background:rgba(245,200,66,.1)">⚙️</div>
+    <span style="color:var(--gold);font-weight:600">Panel de Administrador</span>
+   </div>
+   <div class="mi" onclick="doLogout()" style="color:var(--red)">
+    <div class="miic" style="background:rgba(255,91,91,.1)">🚪</div>Cerrar sesión
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- ═══ VEHICLE MODAL ═══ -->
+<div class="ov" id="modal-vehicle" onclick="bgX(event,'modal-vehicle')">
+ <div class="modal" onclick="event.stopPropagation()">
+  <div class="mh"><h2>Nuevo vehículo</h2><button class="xb" onclick="closeM('vehicle')">✕</button></div>
+  <div class="mb">
+   <div class="r2">
+    <div class="fg"><label>Placas</label><input id="vpl" type="text" placeholder="ABC-123" style="text-transform:uppercase"></div>
+    <div class="fg"><label>Tipo</label>
+     <select id="vtp"><option value="auto">🚗 Auto</option><option value="suv">🚙 SUV</option><option value="moto">🏍️ Moto</option><option value="camion">🚐 Camión</option></select>
+    </div>
+   </div>
+   <div class="r2">
+    <div class="fg"><label>Marca</label><input id="vbr" type="text" placeholder="Nissan"></div>
+    <div class="fg"><label>Modelo</label><input id="vmo" type="text" placeholder="Versa"></div>
+   </div>
+   <div class="fg"><label>Color</label><input id="vcl" type="text" placeholder="Gris"></div>
+  </div>
+  <div class="mf">
+   <button class="bcancel" onclick="closeM('vehicle')">Cancelar</button>
+   <button class="bsub" onclick="doSaveVehicle()">Guardar</button>
+  </div>
+ </div>
+</div>
+
+<div id="snack"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module">
+import { initializeApp }                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword,
+         signInWithEmailAndPassword, signOut,
+         onAuthStateChanged, updateProfile }          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc,
+         collection, addDoc, getDocs, deleteDoc,
+         query, where, orderBy, onSnapshot,
+         updateDoc, increment, serverTimestamp,
+         Timestamp }                                  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ══════════════════════════════════════════════════
+   🔥 PEGA AQUÍ TU FIREBASE CONFIG
+   Firebase Console → Project Settings → Web App → firebaseConfig
+   ══════════════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyB9b5kGcIAXltYazwKkrA3FW3Z3DwLMDI0",
+  authDomain: "lugaria-guadalajara-9505e.firebaseapp.com",
+  projectId: "lugaria-guadalajara-9505e",
+  storageBucket: "lugaria-guadalajara-9505e.firebasestorage.app",
+  messagingSenderId: "456373137134",
+  appId: "1:456373137134:web:f7d150c367f3ebbdeb4dff",
+  measurementId: "G-K1Z09169FH"
+};
+
+/* UIDs que serán administradores.
+   Crea la cuenta primero, copia el UID desde
+   Firebase Console → Authentication → Users → UID
+   y agrégalo aquí: ["uid1","uid2"] */
+const ADMIN_UIDS = ["UEJ0LyXewXXUd7Il4FZq5ffeE8u2"];
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+/* ── Constantes ─────────────────────────────────── */
+const VICONS = {auto:'🚗',suv:'🚙',moto:'🏍️',camion:'🚐'};
+const VTYPES = {auto:'Auto',suv:'SUV/Pickup',moto:'Moto',camion:'Camión'};
+const DURS   = [{l:'30 min',h:.5},{l:'1 hora',h:1},{l:'2 horas',h:2},{l:'3 horas',h:3},{l:'4 horas',h:4},{l:'6 horas',h:6}];
+const STATUS_LABEL = {a:'Disponible',f:'Pocas plazas',x:'Lleno'};
+const BAR_CLR      = {a:'var(--acc)',f:'var(--gold)',x:'var(--red)'};
+
+/* ── Estado ─────────────────────────────────────── */
+const S = {
+  user:null,isAdmin:false,
+  vehicles:[],parkings:[],reservations:[],
+  selPk:null,selVeh:null,selDur:null,
+  filter:'all',markers:{},map:null,unsub:null
+};
+
+/* ── Helpers ─────────────────────────────────────── */
+const $    = id => document.getElementById(id);
+const st   = (msg,err=0)=>{ const e=$('snack'); e.textContent=msg; e.className='on'+(err?' err':''); setTimeout(()=>e.className='',2800); };
+const ini  = n => (n||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const sts  = (a,t) => a===0?'x':(a/t)<=.25?'f':'a';
+const fmtT = ts => { if(!ts)return'—'; const d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}); };
+const code = () => 'LUG-'+Math.random().toString(36).substr(2,6).toUpperCase();
+const isMob= () => window.innerWidth<=700;
+
+function ldBtn(id,on){
+  const b=$(id); if(!b)return;
+  if(on){b.dataset.t=b.textContent;b.innerHTML='<span class="ld"></span>';b.disabled=true;}
+  else{b.textContent=b.dataset.t||'OK';b.disabled=false;}
+}
+
+/* ── Leaflet map ─────────────────────────────────── */
+function initMap(){
+  S.map = L.map('map',{center:[20.6767,-103.3471],zoom:13,zoomControl:!isMob()});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>',maxZoom:19
+  }).addTo(S.map);
+  // On mobile, invalidate size after sheet opens
+  window.addEventListener('resize',()=>S.map.invalidateSize());
+}
+
+function pinIcon(pk){
+  const s=sts(pk.availSpots,pk.totalSpots);
+  return L.divIcon({
+    html:`<div class="lf-pin"><div class="pin-box ${s}"><div class="pb-name">${pk.name}</div><div class="pb-num ${s}">${pk.availSpots}</div><div class="pb-sub">${s==='x'?'lleno':'disponibles'}</div></div><div class="pin-tip ${s}"></div></div>`,
+    className:'',iconAnchor:[42,50],popupAnchor:[0,-52]
+  });
+}
+
+function popupHtml(pk){
+  const s=sts(pk.availSpots,pk.totalSpots);
+  return `<div><div class="pop-name">${pk.name}</div><div class="pop-info">${pk.address}<br>${pk.availSpots}/${pk.totalSpots} lugares · $${pk.pricePerHour}/hr<br>${pk.hours}</div><button class="pop-btn" ${s==='x'?'disabled':''} onclick="window._res('${pk.id}')">
+    ${s==='x'?'Lleno':'Reservar →'}</button></div>`;
+}
+
+function syncMarkers(){
+  // Remove old
+  Object.keys(S.markers).forEach(id=>{
+    if(!S.parkings.find(p=>p.id===id)){S.map.removeLayer(S.markers[id]);delete S.markers[id];}
+  });
+  S.parkings.forEach(pk=>{
+    if(!pk.lat||!pk.lng)return;
+    if(S.markers[pk.id]){
+      S.markers[pk.id].setIcon(pinIcon(pk));
+      S.markers[pk.id].setPopupContent(popupHtml(pk));
+    } else {
+      const m=L.marker([pk.lat,pk.lng],{icon:pinIcon(pk)})
+        .bindPopup(popupHtml(pk),{maxWidth:200})
+        .addTo(S.map);
+      m.on('click',()=>{S.selPk=pk.id;renderList();syncMobileList();});
+      S.markers[pk.id]=m;
+    }
+  });
+}
+
+window._res = id => openReserve(id);
+
+/* ── Firestore live listener ─────────────────────── */
+function startParkings(){
+  let q;
+  try{ q=query(collection(db,'parkings'),where('active','==',true)); }
+  catch{ loadDemo();return; }
+  S.unsub=onSnapshot(q,snap=>{
+    S.parkings=snap.docs.map(d=>({id:d.id,...d.data()}));
+    syncMarkers();renderList();syncMobileList();
+  },_=>loadDemo());
+}
+
+function loadDemo(){
+  S.parkings=[
+    {id:'p1',name:'Plaza Sol',     address:'Av. Vallarta 1234',          lat:20.6764,lng:-103.3820,totalSpots:20,availSpots:14,pricePerHour:20,hours:'6:00–22:00',type:'Cubierto',      active:true},
+    {id:'p2',name:'Centro GDL',    address:'Morelos 456, Centro Hist.',   lat:20.6596,lng:-103.3496,totalSpots:30,availSpots:3, pricePerHour:15,hours:'7:00–21:00',type:'Al aire libre',active:true},
+    {id:'p3',name:'Chapultepec',   address:'Av. Chapultepec 789',         lat:20.6731,lng:-103.3744,totalSpots:50,availSpots:0, pricePerHour:18,hours:'6:00–23:00',type:'Cubierto',      active:true},
+    {id:'p4',name:'Puerta Norte',  address:'Av. Américas 2100',           lat:20.6893,lng:-103.3641,totalSpots:80,availSpots:28,pricePerHour:12,hours:'24 horas',  type:'Al aire libre',active:true},
+    {id:'p5',name:'Mercado TJ',    address:'Independencia 300, Tlaq.',    lat:20.6412,lng:-103.3124,totalSpots:25,availSpots:5, pricePerHour:10,hours:'8:00–20:00',type:'Al aire libre',active:true},
+    {id:'p6',name:'Andares',       address:'Blvd. Puerta de Hierro 4965', lat:20.7255,lng:-103.4222,totalSpots:200,availSpots:87,pricePerHour:25,hours:'10:00–22:00',type:'Cubierto',   active:true},
+  ];
+  syncMarkers();renderList();syncMobileList();
+}
+
+/* ── Filter & render ─────────────────────────────── */
+window.setF=(f,el,mob=false)=>{
+  S.filter=f;
+  const cont=mob?$('mchips'):$('dchips');
+  cont.querySelectorAll('.chip').forEach(c=>c.className='chip');
+  const cls={all:'ca',avail:'ca',few:'cf',full:'cx'}[f]||'ca';
+  el.className=`chip ${cls}`;
+  renderList();syncMobileList();
+};
+
+function cardHtml(pk,sel){
+  const s=sts(pk.availSpots,pk.totalSpots);
+  const pct=Math.round(pk.availSpots/pk.totalSpots*100);
+  return `<div class="pkc${sel?' sel':''}" onclick="focusPk('${pk.id}')">
+    <div class="pkct"><div class="pkn">${pk.name}</div><div class="bdg b${s}">${STATUS_LABEL[s]}</div></div>
+    <div class="pka">${pk.address}</div>
+    <div class="pkrow">
+      <div class="pkst"><strong>${pk.availSpots}/${pk.totalSpots}</strong> lugares</div>
+      <div class="pkst"><strong>$${pk.pricePerHour}/hr</strong></div>
+      <div class="pkst">${pk.type}</div>
+    </div>
+    <div class="bar"><div class="barf" style="width:${pct}%;background:${BAR_CLR[s]}"></div></div>
+    <button class="resbtn" ${s==='x'?'disabled':''} onclick="event.stopPropagation();openReserve('${pk.id}')">
+      ${s==='x'?'Lleno':'Reservar lugar →'}
+    </button>
+  </div>`;
+}
+
+function filteredParkings(){
+  const q=($('dq')?.value||$('mq')?.value||'').toLowerCase();
+  const fm={avail:'a',few:'f',full:'x'};
+  let items=S.parkings;
+  if(S.filter!=='all') items=items.filter(p=>sts(p.availSpots,p.totalSpots)===fm[S.filter]);
+  if(q) items=items.filter(p=>p.name.toLowerCase().includes(q)||p.address.toLowerCase().includes(q));
+  return items;
+}
+
+window.renderList=()=>{
+  const items=filteredParkings();
+  const el=$('dlist');
+  el.innerHTML=items.length?items.map(p=>cardHtml(p,S.selPk===p.id)).join(''):'<div class="empt">Sin resultados</div>';
+};
+
+window.syncMobileList=()=>{
+  const items=filteredParkings();
+  const el=$('mlist');
+  el.innerHTML=items.length?items.map(p=>cardHtml(p,S.selPk===p.id)).join(''):'<div class="empt">Sin resultados</div>';
+};
+
+window.focusPk=id=>{
+  S.selPk=id;renderList();syncMobileList();
+  const pk=S.parkings.find(p=>p.id===id);
+  if(pk&&pk.lat&&S.map){
+    S.map.setView([pk.lat,pk.lng],15,{animate:true});
+    setTimeout(()=>S.markers[id]?.openPopup(),350);
+  }
+  if(isMob()) closeSheet();
+};
+
+/* ── Mobile sheet & nav ──────────────────────────── */
+window.openSheet=()=>{ $('bsheet').classList.add('open'); syncMobileList(); };
+window.closeSheet=()=>$('bsheet').classList.remove('open');
+
+window.mnavGo=tab=>{
+  document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.remove('active'));
+  if(tab==='map'){$('mn-map').classList.add('active');closeSheet();}
+  else if(tab==='list'){$('mn-list').classList.add('active');openSheet();}
+  else if(tab==='profile-btn'){
+    $('mn-profile').classList.add('active');
+    if(S.user) openM('profile'); else openM('auth','login');
+  }
+};
+
+/* ── Auth ────────────────────────────────────────── */
+onAuthStateChanged(auth,async user=>{
+  S.user=user;
+  if(user){
+    S.isAdmin=ADMIN_UIDS.includes(user.uid);
+    S.vehicles=await loadVehicles(user.uid);
+    S.reservations=await loadReservations(user.uid);
+    const nm=user.displayName||'Usuario';
+    $('uav').textContent=ini(nm);$('unm').textContent=nm.split(' ')[0];
+    $('hg').style.display='none';$('hu').style.display='flex';
+    if(S.isAdmin){$('abadge').style.display='inline';$('adminlink').style.display='flex';}
+    $('mn-plbl').textContent=nm.split(' ')[0];
+  } else {
+    S.isAdmin=false;S.vehicles=[];S.reservations=[];
+    $('hg').style.display='flex';$('hu').style.display='none';
+    $('abadge').style.display='none';$('adminlink').style.display='none';
+    $('mn-plbl').textContent='Perfil';
+  }
+});
+
+window.doAuth=async()=>{
+  const isL=$('fl').style.display!=='none';
+  $('aerr').className='errbox';
+  ldBtn('asub',true);
+  try{
+    if(isL){
+      const e=$('le').value.trim(),p=$('lp').value;
+      if(!e||!p) throw new Error('Completa todos los campos');
+      await signInWithEmailAndPassword(auth,e,p);
+      closeM('auth');st('¡Bienvenido de vuelta!');
+    } else {
+      const n=$('rn').value.trim(),l=$('rl').value.trim(),
+            e=$('re').value.trim(),ph=$('rph').value.trim(),p=$('rp').value;
+      if(!n||!e||!p) throw new Error('Nombre, correo y contraseña son requeridos');
+      const full=n+(l?' '+l:'');
+      const cr=await createUserWithEmailAndPassword(auth,e,p);
+      await updateProfile(cr.user,{displayName:full});
+      await setDoc(doc(db,'users',cr.user.uid),{uid:cr.user.uid,name:full,email:e,phone:ph,createdAt:serverTimestamp()});
+      const pl=$('rvpl').value.trim();
+      if(pl) await addDoc(collection(db,'users',cr.user.uid,'vehicles'),{
+        plate:pl.toUpperCase(),type:$('rvtp').value,brand:$('rvbr').value.trim(),color:$('rvcl').value.trim(),createdAt:serverTimestamp()
+      });
+      closeM('auth');st('¡Bienvenido a Lugaria! 🎉');
+    }
+  } catch(e){
+    const msg=e.code==='auth/user-not-found'||e.code==='auth/wrong-password'?'Correo o contraseña incorrectos'
+      :e.code==='auth/email-already-in-use'?'Este correo ya está registrado'
+      :e.code==='auth/weak-password'?'Contraseña mínimo 6 caracteres':e.message;
+    $('aerr').textContent=msg;$('aerr').className='errbox on';
+  } finally{ldBtn('asub',false);}
+};
+
+window.doLogout=async()=>{ await signOut(auth);closeM('profile');st('Sesión cerrada'); };
+
+/* ── Vehicles ────────────────────────────────────── */
+async function loadVehicles(uid){
+  try{
+    const q=query(collection(db,'users',uid,'vehicles'),orderBy('createdAt','desc'));
+    return (await getDocs(q)).docs.map(d=>({id:d.id,...d.data()}));
+  }catch{return[];}
+}
+window.doSaveVehicle=async()=>{
+  if(!S.user){st('Inicia sesión primero',1);return;}
+  const pl=$('vpl').value.trim();
+  if(!pl){st('Las placas son requeridas',1);return;}
+  await addDoc(collection(db,'users',S.user.uid,'vehicles'),{
+    plate:pl.toUpperCase(),type:$('vtp').value,
+    brand:$('vbr').value.trim(),model:$('vmo').value.trim(),
+    color:$('vcl').value.trim(),createdAt:serverTimestamp()
+  });
+  S.vehicles=await loadVehicles(S.user.uid);
+  closeM('vehicle');st('Vehículo guardado ✓');
+};
+window.doDelVehicle=async vid=>{
+  if(!S.user)return;
+  await deleteDoc(doc(db,'users',S.user.uid,'vehicles',vid));
+  S.vehicles=await loadVehicles(S.user.uid);
+  renderProfile();
+};
+
+/* ── Reservations ────────────────────────────────── */
+async function loadReservations(uid){
+  try{
+    const q=query(collection(db,'reservations'),where('userId','==',uid),orderBy('createdAt','desc'));
+    return (await getDocs(q)).docs.map(d=>({id:d.id,...d.data()}));
+  }catch{return[];}
+}
+
+window.openReserve=pkId=>{
+  if(!S.user){st('Inicia sesión para reservar',1);openM('auth','login');return;}
+  const pk=S.parkings.find(p=>p.id===pkId);if(!pk)return;
+  S.selPk=pkId;S.selDur=null;S.selVeh=S.vehicles[0]?.id||null;
+  const vhtml=S.vehicles.length
+    ?`<div class="fg"><label>Vehículo</label><select id="rveh" onchange="window._sv(this.value)">${S.vehicles.map(v=>`<option value="${v.id}">${VICONS[v.type]||'🚗'} ${v.plate}${v.brand?' — '+v.brand:''}</option>`).join('')}</select></div>`
+    :`<div style="padding:9px;background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.2);border-radius:8px;font-size:11px;color:var(--gold);margin-bottom:10px">Sin vehículos. <span style="cursor:pointer;text-decoration:underline" onclick="closeM('reserve');openM('vehicle')">Agregar uno</span></div>`;
+  $('resbody').innerHTML=`
+    <div class="pkdet">
+      <div class="pkdr"><span class="pdl">Estacionamiento</span><span class="pdv">${pk.name}</span></div>
+      <div class="pkdr"><span class="pdl">Disponibles</span><span class="pdv" style="color:var(--acc)">${pk.availSpots} de ${pk.totalSpots}</span></div>
+      <div class="pkdr"><span class="pdl">Tarifa</span><span class="pdv">$${pk.pricePerHour} MXN/hr</span></div>
+      <div class="pkdr"><span class="pdl">Horario</span><span class="pdv">${pk.hours}</span></div>
+    </div>
+    ${vhtml}
+    <div class="fg"><label>Duración</label>
+      <div class="slots">${DURS.map((d,i)=>`<button class="slot" onclick="pickDur(${i})">${d.l}</button>`).join('')}</div>
+    </div>
+    <div class="fg"><label>Hora de llegada</label><input type="time" id="rtime" value="${new Date().toTimeString().slice(0,5)}"></div>
+    <div id="pprv" style="display:none;text-align:right;font-size:12px;color:var(--muted);margin-top:5px">
+      Total: <strong id="ptot" style="color:var(--text)">—</strong>
+    </div>`;
+  $('resfoot').innerHTML=`<button class="bcancel" onclick="closeM('reserve')">Cancelar</button><button class="bsub" id="rsub" onclick="doReserve()">Confirmar</button>`;
+  openM('reserve');
+};
+window._sv=v=>S.selVeh=v;
+
+window.pickDur=i=>{
+  S.selDur=DURS[i];
+  document.querySelectorAll('.slot').forEach((s,j)=>s.className='slot'+(j===i?' on':''));
+  const pk=S.parkings.find(p=>p.id===S.selPk);
+  if(pk){$('pprv').style.display='block';$('ptot').textContent='$'+Math.round(pk.pricePerHour*S.selDur.h)+' MXN';}
+};
+
+window.doReserve=async()=>{
+  if(!S.selDur){st('Selecciona la duración',1);return;}
+  if(!S.vehicles.length){st('Agrega un vehículo primero',1);return;}
+  const pk=S.parkings.find(p=>p.id===S.selPk);
+  const veh=S.vehicles.find(v=>v.id===($('rveh')?.value||S.selVeh))||S.vehicles[0];
+  const arr=$('rtime').value;
+  ldBtn('rsub',true);
+  try{
+    const now=new Date(),[h,m]=arr.split(':').map(Number);
+    const start=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m);
+    const end=new Date(start.getTime()+S.selDur.h*3600000);
+    const conf=code();
+    const total=Math.round((pk?.pricePerHour||0)*S.selDur.h);
+    let rid='demo_'+Date.now();
+    try{
+      const ref=await addDoc(collection(db,'reservations'),{
+        userId:S.user.uid,parkingId:pk.id,parkingName:pk.name,
+        vehicleId:veh.id,vehiclePlate:veh.plate,vehicleType:veh.type,
+        startTime:Timestamp.fromDate(start),endTime:Timestamp.fromDate(end),
+        durationHours:S.selDur.h,totalPrice:total,
+        confirmCode:conf,status:'active',createdAt:serverTimestamp()
+      });
+      rid=ref.id;
+      await updateDoc(doc(db,'parkings',pk.id),{availSpots:increment(-1)});
+    }catch{}
+    S.reservations.unshift({id:rid,parkingName:pk.name,confirmCode:conf,startTime:{toDate:()=>start},durationHours:S.selDur.h,totalPrice:total,status:'active'});
+    $('resbody').innerHTML=`<div class="sbox"><div style="font-size:46px;margin-bottom:10px">✅</div><h3>¡Reserva confirmada!</h3><p>${pk.name} · ${arr} · ${S.selDur.l}</p><div class="codebox">${conf}</div><p style="margin-top:10px">Total: <strong>$${total} MXN</strong></p><p style="margin-top:6px;font-size:10px;color:var(--muted)">Presenta este código al llegar</p></div>`;
+    $('resfoot').innerHTML=`<button class="bsub" style="flex:1" onclick="closeM('reserve')">¡Listo!</button>`;
+  }catch(e){st('Error: '+e.message,1);ldBtn('rsub',false);}
+};
+
+/* ── Profile render ──────────────────────────────── */
+window.renderProfile=async()=>{
+  if(!S.user)return;
+  const nm=S.user.displayName||'Usuario';
+  $('pav').textContent=ini(nm);$('pnm').textContent=nm;$('pem').textContent=S.user.email;
+  S.vehicles=await loadVehicles(S.user.uid);
+  $('vlist').innerHTML=S.vehicles.length
+    ?S.vehicles.map(v=>`<div class="vi"><div class="viic">${VICONS[v.type]||'🚗'}</div><div><div class="vipl">${v.plate}</div><div class="vidc">${v.brand||''} ${v.color||''} · ${VTYPES[v.type]||''}</div></div><button class="vdel" onclick="doDelVehicle('${v.id}')">🗑</button></div>`).join('')
+    :'<div class="empt" style="padding:10px 0">Sin vehículos</div>';
+  S.reservations=await loadReservations(S.user.uid);
+  $('rlist').innerHTML=S.reservations.length
+    ?S.reservations.slice(0,4).map(r=>{
+        const dur=DURS.find(d=>d.h===r.durationHours)?.l||(r.durationHours+'h');
+        const sc={active:'sa',cancelled:'sc',completed:'se'}[r.status||'active'];
+        const sl={active:'Activa',cancelled:'Cancelada',completed:'Completada'}[r.status||'active'];
+        return `<div class="ri"><div class="rit"><div class="ripk">${r.parkingName}</div><div class="spill ${sc}">${sl}</div></div><div class="rimeta">${fmtT(r.startTime)} · ${dur} · <strong>${r.confirmCode}</strong></div></div>`;
+      }).join('')
+    :'<div class="empt" style="padding:10px 0">Sin reservas</div>';
+};
+
+/* ── Modal helpers ───────────────────────────────── */
+window.openM=(n,tab)=>{
+  $('modal-'+n).classList.add('open');
+  if(n==='auth'&&tab)swTab(tab);
+  if(n==='profile')renderProfile();
+};
+window.closeM=n=>$('modal-'+n).classList.remove('open');
+window.bgX=(e,id)=>{ if(e.target.id===id)closeM(id.replace('modal-','')); };
+window.swTab=t=>{
+  const l=t==='login';
+  $('fl').style.display=l?'block':'none';$('fr').style.display=l?'none':'block';
+  $('tin').className='tab'+(l?' on':'');$('treg').className='tab'+(!l?' on':'');
+  $('ah2').textContent=l?'Iniciar sesión':'Crear cuenta';
+  $('asub').textContent=l?'Entrar':'Crear cuenta';
+  $('aerr').className='errbox';
+};
+
+/* ── Boot ────────────────────────────────────────── */
+initMap();
+startParkings();
+</script>
+</body>
+</html>
