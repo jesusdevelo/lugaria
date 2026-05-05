@@ -25,7 +25,7 @@ button{cursor:pointer;font-family:var(--f);border:none}
 input,select,textarea{font-family:var(--f)}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--s4);border-radius:3px}
-
+ 
 /* ─── Header ─────────────────────────────────────── */
 #hdr{
   position:fixed;top:0;left:0;right:0;z-index:500;
@@ -47,17 +47,17 @@ input,select,textarea{font-family:var(--f)}
 .uav{width:27px;height:27px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#001a0d;flex-shrink:0}
 .unm{font-size:12px;font-weight:500}
 .admbdg{padding:2px 7px;background:rgba(245,200,66,.12);color:var(--gold);border:1px solid rgba(245,200,66,.2);border-radius:10px;font-size:10px;font-weight:700}
-
+ 
 /* ─── App shell ──────────────────────────────────── */
 #app{
   position:fixed;top:var(--hh);left:0;right:0;bottom:0;
   display:flex;
 }
-
+ 
 /* ─── Map ────────────────────────────────────────── */
 #map-wrap{flex:1;position:relative;min-width:0}
 #map{width:100%;height:100%}
-
+ 
 /* ─── Sidebar (desktop) ──────────────────────────── */
 #sidebar{
   width:300px;flex-shrink:0;
@@ -80,7 +80,7 @@ input,select,textarea{font-family:var(--f)}
 .sblgd{padding:8px 13px;border-top:1px solid var(--border);display:flex;gap:10px}
 .leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
 .ldot{width:6px;height:6px;border-radius:50%}
-
+ 
 /* ─── Parking card ───────────────────────────────── */
 .pkc{padding:12px 13px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;position:relative}
 .pkc:hover,.pkc.sel{background:var(--s2)}
@@ -101,7 +101,7 @@ input,select,textarea{font-family:var(--f)}
 .resbtn:hover,.resbtn:active{opacity:.85}
 .resbtn:disabled{background:var(--s3);color:var(--muted);opacity:1;cursor:not-allowed}
 .empt{padding:26px 13px;text-align:center;color:var(--muted);font-size:12px}
-
+ 
 /* ─── Mobile bottom sheet ────────────────────────── */
 #bsheet{
   display:none;
@@ -117,7 +117,7 @@ input,select,textarea{font-family:var(--f)}
 .bsh-head{display:flex;justify-content:space-between;align-items:center;padding:0 14px 10px}
 .bsh-ttl{font-family:var(--fh);font-size:14px;font-weight:700}
 .bsh-x{background:transparent;border:none;color:var(--muted);font-size:20px;line-height:1;padding:0}
-
+ 
 /* ─── Mobile nav bar ─────────────────────────────── */
 #mnav{
   display:none;
@@ -132,7 +132,7 @@ input,select,textarea{font-family:var(--f)}
 .mnav-btn svg{width:20px;height:20px}
 .mnav-btn.active{color:var(--acc)}
 .mnav-btn.active svg{stroke:var(--acc)}
-
+ 
 /* ─── Map search bar (mobile) ────────────────────── */
 #msrch{
   display:none;
@@ -142,7 +142,7 @@ input,select,textarea{font-family:var(--f)}
 .msrch-inner input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px}
 .msrch-inner input::placeholder{color:var(--muted)}
 .msrch-lbtn{background:transparent;border:none;color:var(--muted);font-size:18px;padding:0}
-
+ 
 /* ─── Overlays / Modals ──────────────────────────── */
 .ov{
   position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;
@@ -183,7 +183,7 @@ input,select,textarea{font-family:var(--f)}
 .bsub:disabled{background:var(--s3);color:var(--muted)}
 .errbox{background:rgba(255,91,91,.08);border:1px solid rgba(255,91,91,.2);border-radius:var(--rsm);padding:9px 11px;font-size:12px;color:var(--red);margin-bottom:10px;display:none}
 .errbox.on{display:block}
-
+ 
 /* Vehicle item */
 .vi{display:flex;align-items:center;gap:9px;padding:9px;background:var(--s2);border-radius:var(--rsm);margin-bottom:7px;border:1px solid var(--border)}
 .viic{width:36px;height:36px;background:var(--s3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
@@ -193,20 +193,20 @@ input,select,textarea{font-family:var(--f)}
 .vdel:hover{color:var(--red)}
 .addv{width:100%;padding:10px;background:transparent;border:1.5px dashed var(--border);border-radius:var(--rsm);color:var(--muted);font-size:12px;transition:all .15s}
 .addv:hover,.addv:active{border-color:var(--acc);color:var(--acc)}
-
+ 
 /* Slots */
 .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px}
 .slot{padding:8px 4px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);font-size:11px;font-weight:500;text-align:center;transition:all .15s;color:var(--text)}
 .slot:hover,.slot:active{border-color:var(--acc);color:var(--acc)}
 .slot.on{background:rgba(0,229,160,.1);border-color:var(--acc);color:var(--acc);font-weight:700}
-
+ 
 /* Pk detail */
 .pkdet{background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);padding:11px;margin-bottom:11px}
 .pkdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .pkdr:last-child{margin:0}
 .pdl{font-size:11px;color:var(--muted)}
 .pdv{font-size:12px;font-weight:600}
-
+ 
 /* Reservation item */
 .ri{background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);padding:11px;margin-bottom:7px}
 .rit{display:flex;justify-content:space-between;margin-bottom:4px}
@@ -216,13 +216,13 @@ input,select,textarea{font-family:var(--f)}
 .sa{background:rgba(0,229,160,.1);color:var(--acc)}
 .sc{background:rgba(255,91,91,.08);color:var(--red)}
 .se{background:rgba(122,133,163,.1);color:var(--muted)}
-
+ 
 /* Success */
 .sbox{text-align:center;padding:18px 8px}
 .sbox h3{font-family:var(--fh);font-size:19px;font-weight:700;margin-bottom:6px}
 .sbox p{font-size:12px;color:var(--muted);margin-bottom:12px}
 .codebox{font-family:var(--fh);font-size:22px;font-weight:800;letter-spacing:4px;color:var(--acc);background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.18);border-radius:var(--rsm);padding:11px 16px;display:inline-block}
-
+ 
 /* QR container */
 .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin:14px 0}
 .qr-box{background:#fff;border-radius:10px;padding:10px;display:inline-block;box-shadow:0 2px 12px rgba(0,0,0,.3)}
@@ -237,19 +237,19 @@ input,select,textarea{font-family:var(--f)}
 .btn-qr:hover{border-color:var(--acc);color:var(--acc)}
 .qr-toggle{overflow:hidden;transition:max-height .35s ease;max-height:0}
 .qr-toggle.open{max-height:260px}
-
+ 
 /* Cancel button on reservation items */
 .ri-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
 .btn-cancel-res{background:transparent;border:1px solid rgba(255,91,91,.25);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--red);transition:all .15s}
 .btn-cancel-res:hover{background:rgba(255,91,91,.1)}
 .btn-view-qr{background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--muted);transition:all .15s}
 .btn-view-qr:hover{border-color:var(--acc);color:var(--acc)}
-
+ 
 /* Cancel confirm modal */
 .cancel-warn{background:rgba(255,91,91,.07);border:1px solid rgba(255,91,91,.18);border-radius:var(--rsm);padding:11px 13px;font-size:12px;color:var(--red);margin-bottom:12px;line-height:1.5}
 .bdel{flex:1;padding:10px;background:rgba(255,91,91,.1);border:1px solid rgba(255,91,91,.2);border-radius:var(--rsm);color:var(--red);font-size:13px;font-weight:600;transition:opacity .15s}
 .bdel:hover{opacity:.8}
-
+ 
 /* Profile */
 .ph{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .pav{width:50px;height:50px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#001a0d;font-family:var(--fh);flex-shrink:0}
@@ -258,11 +258,11 @@ input,select,textarea{font-family:var(--f)}
 .mi{display:flex;align-items:center;gap:9px;padding:9px;border-radius:var(--rsm);cursor:pointer;font-size:13px;transition:background .15s}
 .mi:hover,.mi:active{background:var(--s2)}
 .miic{width:32px;height:32px;border-radius:8px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:13px}
-
+ 
 /* Loading */
 .ld{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#001a0d;border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
+ 
 /* Snackbar */
 #snack{
   position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(6px);
@@ -272,7 +272,7 @@ input,select,textarea{font-family:var(--f)}
 }
 #snack.on{opacity:1;transform:translateX(-50%) translateY(0)}
 #snack.err{background:var(--red);color:#fff}
-
+ 
 /* Leaflet overrides */
 .leaflet-popup-content-wrapper{background:var(--s1)!important;border:1px solid var(--border)!important;border-radius:10px!important;box-shadow:0 4px 24px rgba(0,0,0,.55)!important;color:var(--text)!important}
 .leaflet-popup-tip{background:var(--s1)!important}
@@ -295,7 +295,7 @@ input,select,textarea{font-family:var(--f)}
 .pb-sub{font-size:9px;color:#7a85a3}
 .pin-tip{width:0;height:0;border-left:6px solid transparent;border-right:0;margin-left:auto}
 .pin-tip.a,.pin-tip.f,.pin-tip.x{border-top:9px solid #0e1118}
-
+ 
 /* ─── Responsive breakpoint ──────────────────────── */
 @media(max-width:700px){
   #sidebar{display:none}
@@ -315,7 +315,7 @@ input,select,textarea{font-family:var(--f)}
 </style>
 </head>
 <body>
-
+ 
 <!-- HEADER -->
 <div id="hdr">
   <div class="logo"><span class="lg">Lug</span><span class="lw">aria</span><span class="ltag">GDL</span></div>
@@ -334,7 +334,7 @@ input,select,textarea{font-family:var(--f)}
     </div>
   </div>
 </div>
-
+ 
 <!-- APP -->
 <div id="app">
   <!-- Map -->
@@ -349,7 +349,7 @@ input,select,textarea{font-family:var(--f)}
     </div>
     <div id="map"></div>
   </div>
-
+ 
   <!-- Sidebar (desktop) -->
   <div id="sidebar">
     <div class="sbh">
@@ -374,7 +374,7 @@ input,select,textarea{font-family:var(--f)}
     </div>
   </div>
 </div>
-
+ 
 <!-- MOBILE BOTTOM SHEET -->
 <div id="bsheet">
   <div class="bsh-handle"></div>
@@ -393,7 +393,7 @@ input,select,textarea{font-family:var(--f)}
   <div class="divl"></div>
   <div class="sblist" id="mlist" style="max-height:42vh"></div>
 </div>
-
+ 
 <!-- MOBILE NAV BAR -->
 <div id="mnav">
   <button class="mnav-btn active" id="mn-map" onclick="mnavGo('map')">
@@ -409,7 +409,7 @@ input,select,textarea{font-family:var(--f)}
     <span id="mn-plbl">Perfil</span>
   </button>
 </div>
-
+ 
 <!-- ═══ AUTH MODAL ═══ -->
 <div class="ov" id="modal-auth" onclick="bgX(event,'modal-auth')">
  <div class="modal" onclick="event.stopPropagation()">
@@ -454,7 +454,7 @@ input,select,textarea{font-family:var(--f)}
   </div>
  </div>
 </div>
-
+ 
 <!-- ═══ RESERVE MODAL ═══ -->
 <div class="ov" id="modal-reserve" onclick="bgX(event,'modal-reserve')">
  <div class="modal" onclick="event.stopPropagation()">
@@ -466,7 +466,7 @@ input,select,textarea{font-family:var(--f)}
   </div>
  </div>
 </div>
-
+ 
 <!-- ═══ PROFILE MODAL ═══ -->
 <div class="ov" id="modal-profile" onclick="bgX(event,'modal-profile')">
  <div class="modal" onclick="event.stopPropagation()">
@@ -494,7 +494,7 @@ input,select,textarea{font-family:var(--f)}
   </div>
  </div>
 </div>
-
+ 
 <!-- ═══ VEHICLE MODAL ═══ -->
 <div class="ov" id="modal-vehicle" onclick="bgX(event,'modal-vehicle')">
  <div class="modal" onclick="event.stopPropagation()">
@@ -518,7 +518,7 @@ input,select,textarea{font-family:var(--f)}
   </div>
  </div>
 </div>
-
+ 
 <!-- ═══ QR FULL MODAL ═══ -->
 <div class="ov" id="modal-qr" onclick="bgX(event,'modal-qr')">
  <div class="modal" style="max-width:340px" onclick="event.stopPropagation()">
@@ -531,7 +531,7 @@ input,select,textarea{font-family:var(--f)}
   </div>
  </div>
 </div>
-
+ 
 <!-- ═══ CANCEL RESERVATION MODAL ═══ -->
 <div class="ov" id="modal-cancel-res" onclick="bgX(event,'modal-cancel-res')">
  <div class="modal" style="max-width:380px" onclick="event.stopPropagation()">
@@ -548,21 +548,22 @@ input,select,textarea{font-family:var(--f)}
   </div>
  </div>
 </div>
-
+ 
 <div id="snack"></div>
-
+ 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script type="module">
 import { initializeApp }                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword,
          signInWithEmailAndPassword, signOut,
-         onAuthStateChanged, updateProfile }          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+         onAuthStateChanged, updateProfile,
+         browserLocalPersistence, setPersistence }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc,
          collection, addDoc, getDocs, deleteDoc,
          query, where, orderBy, onSnapshot,
          updateDoc, increment, serverTimestamp,
          Timestamp }                                  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+ 
 /* ══════════════════════════════════════════════════
    🔥 PEGA AQUÍ TU FIREBASE CONFIG
    Firebase Console → Project Settings → Web App → firebaseConfig
@@ -576,24 +577,31 @@ const firebaseConfig = {
   appId: "1:456373137134:web:f7d150c367f3ebbdeb4dff",
   measurementId: "G-K1Z09169FH"
 };
-
-/* UIDs que serán administradores.
-   Crea la cuenta primero, copia el UID desde
-   Firebase Console → Authentication → Users → UID
-   y agrégalo aquí: ["uid1","uid2"] */
+ 
+/* ══════════════════════════════════════════════════
+   UIDs con acceso de admin.
+   Déjalo vacío [] durante desarrollo — cualquier
+   cuenta tendrá acceso. Agrega UIDs reales antes
+   de hacer deploy en producción.
+   ══════════════════════════════════════════════════ */
 const ADMIN_UIDS = ["UEJ0LyXewXXUd7Il4FZq5ffeE8u2"];
-
+ 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
-
+ 
+// Mantener sesión activa aunque se recargue la página o se cierre el navegador
+setPersistence(auth, browserLocalPersistence).catch(e =>
+  console.warn('Lugaria: no se pudo configurar persistencia de sesión', e)
+);
+ 
 /* ── Constantes ─────────────────────────────────── */
 const VICONS = {auto:'🚗',suv:'🚙',moto:'🏍️',camion:'🚐'};
 const VTYPES = {auto:'Auto',suv:'SUV/Pickup',moto:'Moto',camion:'Camión'};
 const DURS   = [{l:'30 min',h:.5},{l:'1 hora',h:1},{l:'2 horas',h:2},{l:'3 horas',h:3},{l:'4 horas',h:4},{l:'6 horas',h:6}];
 const STATUS_LABEL = {a:'Disponible',f:'Pocas plazas',x:'Lleno'};
 const BAR_CLR      = {a:'var(--acc)',f:'var(--gold)',x:'var(--red)'};
-
+ 
 /* ── Estado ─────────────────────────────────────── */
 const S = {
   user:null,isAdmin:false,
@@ -601,7 +609,7 @@ const S = {
   selPk:null,selVeh:null,selDur:null,
   filter:'all',markers:{},map:null,unsub:null
 };
-
+ 
 /* ── Helpers ─────────────────────────────────────── */
 const $    = id => document.getElementById(id);
 const st   = (msg,err=0)=>{ const e=$('snack'); e.textContent=msg; e.className='on'+(err?' err':''); setTimeout(()=>e.className='',2800); };
@@ -610,13 +618,13 @@ const sts  = (a,t) => a===0?'x':(a/t)<=.25?'f':'a';
 const fmtT = ts => { if(!ts)return'—'; const d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}); };
 const code = () => 'LUG-'+Math.random().toString(36).substr(2,6).toUpperCase();
 const isMob= () => window.innerWidth<=700;
-
+ 
 function ldBtn(id,on){
   const b=$(id); if(!b)return;
   if(on){b.dataset.t=b.textContent;b.innerHTML='<span class="ld"></span>';b.disabled=true;}
   else{b.textContent=b.dataset.t||'OK';b.disabled=false;}
 }
-
+ 
 /* ── Leaflet map ─────────────────────────────────── */
 function initMap(){
   S.map = L.map('map',{center:[20.6767,-103.3471],zoom:13,zoomControl:!isMob()});
@@ -626,7 +634,7 @@ function initMap(){
   // On mobile, invalidate size after sheet opens
   window.addEventListener('resize',()=>S.map.invalidateSize());
 }
-
+ 
 function pinIcon(pk){
   const s=sts(pk.availSpots,pk.totalSpots);
   return L.divIcon({
@@ -634,13 +642,13 @@ function pinIcon(pk){
     className:'',iconAnchor:[42,50],popupAnchor:[0,-52]
   });
 }
-
+ 
 function popupHtml(pk){
   const s=sts(pk.availSpots,pk.totalSpots);
   return `<div><div class="pop-name">${pk.name}</div><div class="pop-info">${pk.address}<br>${pk.availSpots}/${pk.totalSpots} lugares · $${pk.pricePerHour}/hr<br>${pk.hours}</div><button class="pop-btn" ${s==='x'?'disabled':''} onclick="window._res('${pk.id}')">
     ${s==='x'?'Lleno':'Reservar →'}</button></div>`;
 }
-
+ 
 function syncMarkers(){
   // Remove old
   Object.keys(S.markers).forEach(id=>{
@@ -660,21 +668,46 @@ function syncMarkers(){
     }
   });
 }
-
+ 
 window._res = id => openReserve(id);
-
+ 
 /* ── Firestore live listener ─────────────────────── */
 function startParkings(){
+  // Si el firebaseConfig todavía tiene el placeholder, usar demo directamente
+  if(firebaseConfig.apiKey==='TU_API_KEY'){
+    console.warn('Lugaria: firebaseConfig no configurado — usando datos de demo');
+    loadDemo();
+    return;
+  }
   let q;
   try{ q=query(collection(db,'parkings'),where('active','==',true)); }
-  catch{ loadDemo();return; }
-  S.unsub=onSnapshot(q,snap=>{
-    S.parkings=snap.docs.map(d=>({id:d.id,...d.data()}));
-    syncMarkers();renderList();syncMobileList();
-  },_=>loadDemo());
+  catch(e){ console.error('Lugaria: error construyendo query',e); loadDemo(); return; }
+ 
+  S.unsub=onSnapshot(q,
+    snap=>{
+      if(snap.empty){
+        console.warn('Lugaria: colección parkings vacía o sin documentos con active==true');
+        // Mostrar aviso en sidebar pero NO cargar demo para no confundir
+        $('dlist').innerHTML='<div class="empt">Sin estacionamientos en la base de datos.<br>Agrega algunos desde admin.html</div>';
+        $('mlist').innerHTML=$('dlist').innerHTML;
+        return;
+      }
+      console.log(`Lugaria: ${snap.size} estacionamiento(s) cargados desde Firestore`);
+      S.parkings=snap.docs.map(d=>({id:d.id,...d.data()}));
+      syncMarkers();renderList();syncMobileList();
+    },
+    err=>{
+      console.error('Lugaria: error leyendo parkings desde Firestore →',err.code,err.message);
+      if(err.code==='permission-denied'){
+        console.error('→ Las reglas de Firestore bloquean la lectura. Publica las reglas del archivo firestore.rules');
+      }
+      loadDemo();
+    }
+  );
 }
-
+ 
 function loadDemo(){
+  console.info('Lugaria: cargando datos de demostración (no son tus datos reales)');
   S.parkings=[
     {id:'p1',name:'Plaza Sol',     address:'Av. Vallarta 1234',          lat:20.6764,lng:-103.3820,totalSpots:20,availSpots:14,pricePerHour:20,hours:'6:00–22:00',type:'Cubierto',      active:true},
     {id:'p2',name:'Centro GDL',    address:'Morelos 456, Centro Hist.',   lat:20.6596,lng:-103.3496,totalSpots:30,availSpots:3, pricePerHour:15,hours:'7:00–21:00',type:'Al aire libre',active:true},
@@ -685,7 +718,7 @@ function loadDemo(){
   ];
   syncMarkers();renderList();syncMobileList();
 }
-
+ 
 /* ── Filter & render ─────────────────────────────── */
 window.setF=(f,el,mob=false)=>{
   S.filter=f;
@@ -695,7 +728,7 @@ window.setF=(f,el,mob=false)=>{
   el.className=`chip ${cls}`;
   renderList();syncMobileList();
 };
-
+ 
 function cardHtml(pk,sel){
   const s=sts(pk.availSpots,pk.totalSpots);
   const pct=Math.round(pk.availSpots/pk.totalSpots*100);
@@ -713,7 +746,7 @@ function cardHtml(pk,sel){
     </button>
   </div>`;
 }
-
+ 
 function filteredParkings(){
   const q=($('dq')?.value||$('mq')?.value||'').toLowerCase();
   const fm={avail:'a',few:'f',full:'x'};
@@ -722,19 +755,19 @@ function filteredParkings(){
   if(q) items=items.filter(p=>p.name.toLowerCase().includes(q)||p.address.toLowerCase().includes(q));
   return items;
 }
-
+ 
 window.renderList=()=>{
   const items=filteredParkings();
   const el=$('dlist');
   el.innerHTML=items.length?items.map(p=>cardHtml(p,S.selPk===p.id)).join(''):'<div class="empt">Sin resultados</div>';
 };
-
+ 
 window.syncMobileList=()=>{
   const items=filteredParkings();
   const el=$('mlist');
   el.innerHTML=items.length?items.map(p=>cardHtml(p,S.selPk===p.id)).join(''):'<div class="empt">Sin resultados</div>';
 };
-
+ 
 window.focusPk=id=>{
   S.selPk=id;renderList();syncMobileList();
   const pk=S.parkings.find(p=>p.id===id);
@@ -744,11 +777,11 @@ window.focusPk=id=>{
   }
   if(isMob()) closeSheet();
 };
-
+ 
 /* ── Mobile sheet & nav ──────────────────────────── */
 window.openSheet=()=>{ $('bsheet').classList.add('open'); syncMobileList(); };
 window.closeSheet=()=>$('bsheet').classList.remove('open');
-
+ 
 window.mnavGo=tab=>{
   document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.remove('active'));
   if(tab==='map'){$('mn-map').classList.add('active');closeSheet();}
@@ -758,7 +791,7 @@ window.mnavGo=tab=>{
     if(S.user) openM('profile'); else openM('auth','login');
   }
 };
-
+ 
 /* ── Auth ────────────────────────────────────────── */
 onAuthStateChanged(auth,async user=>{
   S.user=user;
@@ -778,7 +811,7 @@ onAuthStateChanged(auth,async user=>{
     $('mn-plbl').textContent='Perfil';
   }
 });
-
+ 
 window.doAuth=async()=>{
   const isL=$('fl').style.display!=='none';
   $('aerr').className='errbox';
@@ -810,15 +843,24 @@ window.doAuth=async()=>{
     $('aerr').textContent=msg;$('aerr').className='errbox on';
   } finally{ldBtn('asub',false);}
 };
-
+ 
 window.doLogout=async()=>{ await signOut(auth);closeM('profile');st('Sesión cerrada'); };
-
+ 
 /* ── Vehicles ────────────────────────────────────── */
 async function loadVehicles(uid){
   try{
-    const q=query(collection(db,'users',uid,'vehicles'),orderBy('createdAt','desc'));
-    return (await getDocs(q)).docs.map(d=>({id:d.id,...d.data()}));
-  }catch{return[];}
+    const snap=await getDocs(collection(db,'users',uid,'vehicles'));
+    const results=snap.docs.map(d=>({id:d.id,...d.data()}));
+    results.sort((a,b)=>{
+      const ta=a.createdAt?.toMillis?.()|| 0;
+      const tb=b.createdAt?.toMillis?.()|| 0;
+      return tb-ta;
+    });
+    return results;
+  }catch(e){
+    console.error('Lugaria: error cargando vehículos →',e.code,e.message);
+    return[];
+  }
 }
 window.doSaveVehicle=async()=>{
   if(!S.user){st('Inicia sesión primero',1);return;}
@@ -838,15 +880,36 @@ window.doDelVehicle=async vid=>{
   S.vehicles=await loadVehicles(S.user.uid);
   renderProfile();
 };
-
+ 
 /* ── Reservations ────────────────────────────────── */
 async function loadReservations(uid){
   try{
-    const q=query(collection(db,'reservations'),where('userId','==',uid),orderBy('createdAt','desc'));
-    return (await getDocs(q)).docs.map(d=>({id:d.id,...d.data()}));
-  }catch{return[];}
+    console.log('Lugaria: buscando reservas con userId ==',uid);
+    const q=query(collection(db,'reservations'),where('userId','==',uid));
+    const snap=await getDocs(q);
+    const results=snap.docs.map(d=>({id:d.id,...d.data()}));
+    results.sort((a,b)=>{
+      const ta=a.createdAt?.toMillis?.()|| 0;
+      const tb=b.createdAt?.toMillis?.()|| 0;
+      return tb-ta;
+    });
+    console.log(`Lugaria: ${results.length} reserva(s) encontrada(s) para ese uid`);
+    if(results.length===0){
+      // Buscar todas las reservas para diagnóstico (sin filtro de userId)
+      const allSnap=await getDocs(collection(db,'reservations'));
+      console.log(`Lugaria: total de reservas en Firestore: ${allSnap.size}`);
+      allSnap.docs.forEach(d=>{
+        const data=d.data();
+        console.log(`  → doc ${d.id}: userId="${data.userId}", code="${data.confirmCode}"`);
+      });
+    }
+    return results;
+  }catch(e){
+    console.error('Lugaria: error cargando reservas →',e.code,e.message);
+    return[];
+  }
 }
-
+ 
 window.openReserve=pkId=>{
   if(!S.user){st('Inicia sesión para reservar',1);openM('auth','login');return;}
   const pk=S.parkings.find(p=>p.id===pkId);if(!pk)return;
@@ -873,17 +936,18 @@ window.openReserve=pkId=>{
   openM('reserve');
 };
 window._sv=v=>S.selVeh=v;
-
+ 
 window.pickDur=i=>{
   S.selDur=DURS[i];
   document.querySelectorAll('.slot').forEach((s,j)=>s.className='slot'+(j===i?' on':''));
   const pk=S.parkings.find(p=>p.id===S.selPk);
   if(pk){$('pprv').style.display='block';$('ptot').textContent='$'+Math.round(pk.pricePerHour*S.selDur.h)+' MXN';}
 };
-
+ 
 window.doReserve=async()=>{
   if(!S.selDur){st('Selecciona la duración',1);return;}
   if(!S.vehicles.length){st('Agrega un vehículo primero',1);return;}
+  if(!S.user?.uid){st('Sin sesión activa. Inicia sesión de nuevo.',1);return;}
   const pk=S.parkings.find(p=>p.id===S.selPk);
   const veh=S.vehicles.find(v=>v.id===($('rveh')?.value||S.selVeh))||S.vehicles[0];
   const arr=$('rtime').value;
@@ -894,7 +958,9 @@ window.doReserve=async()=>{
     const end=new Date(start.getTime()+S.selDur.h*3600000);
     const conf=code();
     const total=Math.round((pk?.pricePerHour||0)*S.selDur.h);
-    let rid='demo_'+Date.now();
+    // Guardar en Firestore — error visible, no silenciado
+    console.log('Lugaria: guardando reserva, userId=',S.user.uid);
+    let rid;
     try{
       const ref=await addDoc(collection(db,'reservations'),{
         userId:S.user.uid,parkingId:pk.id,parkingName:pk.name,
@@ -904,8 +970,17 @@ window.doReserve=async()=>{
         confirmCode:conf,status:'active',createdAt:serverTimestamp()
       });
       rid=ref.id;
+      console.log('Lugaria: reserva guardada en Firestore ✅ id=',rid);
       await updateDoc(doc(db,'parkings',pk.id),{availSpots:increment(-1)});
-    }catch{}
+    }catch(ferr){
+      console.error('Lugaria: error al guardar reserva ❌',ferr.code,ferr.message);
+      const msg=ferr.code==='permission-denied'
+        ?'Sin permisos para guardar. Verifica las reglas de Firestore y que estés autenticado.'
+        :'Error al guardar reserva: '+ferr.message;
+      st(msg,1);
+      ldBtn('rsub',false);
+      return;
+    }
     S.reservations.unshift({id:rid,parkingId:pk.id,parkingName:pk.name,confirmCode:conf,startTime:{toDate:()=>start},endTime:{toDate:()=>end},durationHours:S.selDur.h,totalPrice:total,vehiclePlate:veh.plate,status:'active'});
     $('resbody').innerHTML=`
       <div class="sbox">
@@ -933,7 +1008,7 @@ window.doReserve=async()=>{
     $('resfoot').innerHTML=`<button class="bsub" style="flex:1" onclick="closeM('reserve')">¡Listo!</button>`;
   }catch(e){st('Error: '+e.message,1);ldBtn('rsub',false);}
 };
-
+ 
 /* ── Profile render ──────────────────────────────── */
 window.renderProfile=async()=>{
   if(!S.user)return;
@@ -949,23 +1024,30 @@ window.renderProfile=async()=>{
         const dur=DURS.find(d=>d.h===r.durationHours)?.l||(r.durationHours+'h');
         const sc={active:'sa',cancelled:'sc',completed:'se'}[r.status||'active'];
         const sl={active:'Activa',cancelled:'Cancelada',completed:'Completada'}[r.status||'active'];
-        const isActive=r.status==='active'||(r.status==null);
+        const isActive=(r.status==='active')||(r.status==null);
         const t=fmtT(r.startTime);
+        // Escape values to be safe inside onclick attributes
+        const esc=s=>(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        const conf=esc(r.confirmCode);
+        const pkName=esc(r.parkingName);
+        const plate=esc(r.vehiclePlate||'');
+        const resId=esc(r.id);
+        const pkId=esc(r.parkingId||'');
         return `<div class="ri">
           <div class="rit">
-            <div class="ripk">${r.parkingName}</div>
+            <div class="ripk">${r.parkingName||'—'}</div>
             <div class="spill ${sc}">${sl}</div>
           </div>
-          <div class="rimeta">${t} · ${dur} · <strong>${r.confirmCode}</strong></div>
+          <div class="rimeta">${t} · ${dur} · <strong>${r.confirmCode||'—'}</strong></div>
           ${isActive?`<div class="ri-foot">
-            <button class="btn-view-qr" onclick="openQRModal('${r.confirmCode}','${r.parkingName}','${t}','${dur}','$${r.totalPrice||0} MXN','${r.vehiclePlate||''}')">📱 Ver QR</button>
-            <button class="btn-cancel-res" onclick="openCancelModal('${r.id}','${r.parkingId||''}','${r.parkingName}','${r.confirmCode}')">Cancelar reserva</button>
+            <button class="btn-view-qr" onclick="openQRModal('${conf}','${pkName}','${t}','${dur}','$${r.totalPrice||0} MXN','${plate}')">📱 Ver QR</button>
+            <button class="btn-cancel-res" onclick="openCancelModal('${resId}','${pkId}','${pkName}','${conf}')">Cancelar reserva</button>
           </div>`:''}
         </div>`;
       }).join('')
     :'<div class="empt" style="padding:10px 0">Sin reservas</div>';
 };
-
+ 
 /* ── QR Code ─────────────────────────────────────── */
 function generateQR(containerId, text) {
   const el = $(containerId);
@@ -987,7 +1069,7 @@ function generateQR(containerId, text) {
     el.innerHTML = `<div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#333;text-align:center;padding:10px">${text}</div>`;
   }
 }
-
+ 
 // QR inline toggle inside confirm modal
 window.toggleQRInline = (conf, pkName, arr, dur, total) => {
   const panel = $('qr-inline');
@@ -1001,7 +1083,7 @@ window.toggleQRInline = (conf, pkName, arr, dur, total) => {
     setTimeout(() => generateQR('qr-inline-box', qrData), 50);
   }
 };
-
+ 
 // QR full modal (from profile)
 window.openQRModal = (conf, pkName, time, dur, total, plate) => {
   $('qr-full-code').textContent = conf;
@@ -1017,11 +1099,11 @@ window.openQRModal = (conf, pkName, time, dur, total, plate) => {
   const qrData = JSON.stringify({ code: conf, parking: pkName, time, duration: dur });
   setTimeout(() => generateQR('qr-full-box', qrData), 120);
 };
-
+ 
 /* ── Cancel reservation ──────────────────────────── */
 let _cancelId = null;
 let _cancelPkId = null;
-
+ 
 window.openCancelModal = (resId, pkId, pkName, conf) => {
   _cancelId   = resId;
   _cancelPkId = pkId;
@@ -1030,7 +1112,7 @@ window.openCancelModal = (resId, pkId, pkName, conf) => {
     <div class="conf-row"><span class="conf-lbl">Código</span><span class="conf-val">${conf}</span></div>`;
   openM('cancel-res');
 };
-
+ 
 window.doCancel = async () => {
   if (!_cancelId) return;
   ldBtn('cancel-sub', true);
@@ -1058,7 +1140,7 @@ window.doCancel = async () => {
     _cancelPkId = null;
   }
 };
-
+ 
 /* ── Modal helpers ───────────────────────────────── */
 window.openM=(n,tab)=>{
   $('modal-'+n).classList.add('open');
@@ -1075,7 +1157,7 @@ window.swTab=t=>{
   $('asub').textContent=l?'Entrar':'Crear cuenta';
   $('aerr').className='errbox';
 };
-
+ 
 /* ── Boot ────────────────────────────────────────── */
 initMap();
 startParkings();

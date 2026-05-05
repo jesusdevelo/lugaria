@@ -20,7 +20,7 @@ button{cursor:pointer;font-family:var(--f);border:none}
 input,select,textarea{font-family:var(--f)}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--s4);border-radius:3px}
-
+ 
 /* ── Login gate ── */
 #login-gate{
   position:fixed;inset:0;background:var(--bg);z-index:9000;
@@ -35,7 +35,7 @@ input,select,textarea{font-family:var(--f)}
 .bfull{width:100%;padding:11px;background:var(--acc);border:none;border-radius:var(--rsm);color:#001a0d;font-size:14px;font-weight:700;margin-top:4px;transition:opacity .15s}
 .bfull:hover{opacity:.88}
 .bfull:disabled{background:var(--s3);color:var(--muted)}
-
+ 
 /* ── Admin sidebar ── */
 #aside{
   width:var(--sw);flex-shrink:0;height:100vh;
@@ -67,7 +67,7 @@ input,select,textarea{font-family:var(--f)}
 .uem-sm{font-size:10px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .logout-btn{background:transparent;border:none;color:var(--muted);font-size:16px;padding:4px;border-radius:4px;flex-shrink:0}
 .logout-btn:hover{color:var(--red)}
-
+ 
 /* ── Main content ── */
 #main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0}
 #topbar{
@@ -77,11 +77,11 @@ input,select,textarea{font-family:var(--f)}
 .topbar-ttl{font-family:var(--fh);font-size:17px;font-weight:700}
 .topbar-r{display:flex;align-items:center;gap:6px}
 #content{flex:1;overflow-y:auto;padding:20px 22px}
-
+ 
 /* ── Views ── */
 .view{display:none}
 .view.active{display:block}
-
+ 
 /* ── Stat cards ── */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px}
 .stat-card{
@@ -97,7 +97,7 @@ input,select,textarea{font-family:var(--f)}
 .sc-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:600;margin-bottom:8px}
 .sc-val{font-family:var(--fh);font-size:28px;font-weight:800;line-height:1}
 .sc-sub{font-size:10px;color:var(--muted);margin-top:4px}
-
+ 
 /* ── Section header ── */
 .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
 .sh h2{font-family:var(--fh);font-size:15px;font-weight:700}
@@ -107,7 +107,7 @@ input,select,textarea{font-family:var(--f)}
   display:flex;align-items:center;gap:5px;
 }
 .btn-add:hover{opacity:.85}
-
+ 
 /* ── Table ── */
 .tbl-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:20px;overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:400px}
@@ -132,7 +132,7 @@ tbody tr:last-child td{border-bottom:none}
 .tba-t{background:rgba(0,229,160,.1);color:var(--acc)}
 .tba-d{background:rgba(255,91,91,.1);color:var(--red)}
 .empt-row td{text-align:center;padding:28px;color:var(--muted);font-size:13px}
-
+ 
 /* ── Badges ── */
 .bdg{padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;white-space:nowrap}
 .ba{background:rgba(0,229,160,.1);color:var(--acc)}
@@ -142,7 +142,7 @@ tbody tr:last-child td{border-bottom:none}
 .bcan{background:rgba(255,91,91,.08);color:var(--red)}
 .bcom{background:rgba(122,133,163,.1);color:var(--muted)}
 .binact{background:rgba(122,133,163,.1);color:var(--muted)}
-
+ 
 /* ── Search bar ── */
 .srch-bar{
   display:flex;align-items:center;gap:7px;
@@ -151,7 +151,7 @@ tbody tr:last-child td{border-bottom:none}
 }
 .srch-bar input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px}
 .srch-bar input::placeholder{color:var(--muted)}
-
+ 
 /* ── Modals ── */
 .ov{
   position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;
@@ -197,12 +197,12 @@ tbody tr:last-child td{border-bottom:none}
 .errbox.on{display:block}
 .info-box{background:rgba(91,159,255,.06);border:1px solid rgba(91,159,255,.15);border-radius:var(--rsm);padding:10px 12px;font-size:12px;color:var(--blue);margin-bottom:12px;line-height:1.5}
 .info-box a{color:var(--blue)}
-
+ 
 /* Loading spinner */
 .ld{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#001a0d;border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
+ 
 /* Snackbar */
 #snack{
   position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(6px);
@@ -212,7 +212,7 @@ tbody tr:last-child td{border-bottom:none}
 }
 #snack.on{opacity:1;transform:translateX(-50%) translateY(0)}
 #snack.err{background:var(--red);color:#fff}
-
+ 
 /* ── Responsive ── */
 @media(max-width:900px){
   #aside{width:52px}
@@ -234,7 +234,7 @@ tbody tr:last-child td{border-bottom:none}
 </style>
 </head>
 <body>
-
+ 
 <!-- ═══ LOGIN GATE ═══ -->
 <div id="login-gate">
   <div class="login-card">
@@ -248,7 +248,7 @@ tbody tr:last-child td{border-bottom:none}
     <a href="index.html" style="display:block;margin-top:10px;font-size:11px;color:var(--muted)">← Volver a la app</a>
   </div>
 </div>
-
+ 
 <!-- ═══ ADMIN LAYOUT ═══ -->
 <div id="aside">
   <div class="aside-logo">
@@ -280,7 +280,7 @@ tbody tr:last-child td{border-bottom:none}
     </div>
   </div>
 </div>
-
+ 
 <div id="main">
   <div id="topbar">
     <div class="topbar-ttl" id="ttl">Dashboard</div>
@@ -289,9 +289,9 @@ tbody tr:last-child td{border-bottom:none}
       <span style="font-size:11px;color:var(--muted);margin-left:4px">En vivo</span>
     </div>
   </div>
-
+ 
   <div id="content">
-
+ 
     <!-- Dashboard -->
     <div class="view active" id="v-dashboard">
       <div class="stats-grid">
@@ -331,7 +331,7 @@ tbody tr:last-child td{border-bottom:none}
         </table>
       </div>
     </div>
-
+ 
     <!-- Estacionamientos -->
     <div class="view" id="v-parkings">
       <div class="sh">
@@ -349,7 +349,7 @@ tbody tr:last-child td{border-bottom:none}
         </table>
       </div>
     </div>
-
+ 
     <!-- Reservas -->
     <div class="view" id="v-reservations">
       <div class="sh"><h2>Reservas</h2></div>
@@ -364,7 +364,7 @@ tbody tr:last-child td{border-bottom:none}
         </table>
       </div>
     </div>
-
+ 
     <!-- Usuarios -->
     <div class="view" id="v-users">
       <div class="sh"><h2>Usuarios</h2></div>
@@ -379,10 +379,10 @@ tbody tr:last-child td{border-bottom:none}
         </table>
       </div>
     </div>
-
+ 
   </div>
 </div>
-
+ 
 <!-- ═══ PARKING FORM MODAL ═══ -->
 <div class="ov" id="modal-pk-form" onclick="bgX(event,'modal-pk-form')">
  <div class="modal" onclick="event.stopPropagation()">
@@ -426,7 +426,7 @@ tbody tr:last-child td{border-bottom:none}
   </div>
  </div>
 </div>
-
+ 
 <!-- ═══ ADJUST SPOTS MODAL ═══ -->
 <div class="ov" id="modal-adjust" onclick="bgX(event,'modal-adjust')">
  <div class="modal" onclick="event.stopPropagation()">
@@ -445,7 +445,7 @@ tbody tr:last-child td{border-bottom:none}
   </div>
  </div>
 </div>
-
+ 
 <!-- ═══ DELETE CONFIRM MODAL ═══ -->
 <div class="ov" id="modal-del" onclick="bgX(event,'modal-del')">
  <div class="modal" onclick="event.stopPropagation()">
@@ -459,18 +459,19 @@ tbody tr:last-child td{border-bottom:none}
   </div>
  </div>
 </div>
-
+ 
 <div id="snack"></div>
-
+ 
 <script type="module">
 import { initializeApp }                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword,
-         signOut, onAuthStateChanged }               from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+         signOut, onAuthStateChanged,
+         browserLocalPersistence, setPersistence }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs,
          doc, updateDoc, deleteDoc,
          query, orderBy, where, onSnapshot,
          serverTimestamp }                           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+ 
 /* ══════════════════════════════════════════════════
    🔥 PEGA AQUÍ TU FIREBASE CONFIG
    Debe ser IDÉNTICO al de index.html
@@ -484,17 +485,24 @@ const firebaseConfig = {
   appId: "1:456373137134:web:f7d150c367f3ebbdeb4dff",
   measurementId: "G-K1Z09169FH"
 };
-
-/* UIDs que serán administradores.
-   Crea la cuenta primero, copia el UID desde
-   Firebase Console → Authentication → Users → UID
-   y agrégalo aquí: ["uid1","uid2"] */
+ 
+/* ══════════════════════════════════════════════════
+   UIDs con acceso de admin.
+   Déjalo vacío [] durante desarrollo — cualquier
+   cuenta tendrá acceso. Agrega UIDs reales antes
+   de hacer deploy en producción.
+   ══════════════════════════════════════════════════ */
 const ADMIN_UIDS = ["UEJ0LyXewXXUd7Il4FZq5ffeE8u2"];
-
+ 
 const fbApp = initializeApp(firebaseConfig);
 const auth  = getAuth(fbApp);
 const db    = getFirestore(fbApp);
-
+ 
+// Mantener sesión activa aunque se recargue la página
+setPersistence(auth, browserLocalPersistence).catch(e =>
+  console.warn('Lugaria Admin: no se pudo configurar persistencia', e)
+);
+ 
 /* ── Constantes ── */
 const DURS = [
   {l:'30 min',h:.5},{l:'1 hora',h:1},{l:'2 horas',h:2},
@@ -504,7 +512,7 @@ const VIEWS = {
   dashboard:'Dashboard', parkings:'Estacionamientos',
   reservations:'Reservas', users:'Usuarios'
 };
-
+ 
 /* ── Estado global ── */
 const S = {
   user:null,
@@ -516,7 +524,7 @@ const S = {
   adjPkId:null,
   unsub:null
 };
-
+ 
 /* ── Utilidades ── */
 const $   = id => document.getElementById(id);
 const snk = (msg, err=0) => {
@@ -533,14 +541,14 @@ const fmtT = ts => {
 };
 const sts  = (a, t) => a === 0 ? 'x' : (a / t) <= .25 ? 'f' : 'a';
 const pct  = (a, t) => Math.round((a / t) * 100);
-
+ 
 function ldBtn(id, on) {
   const b = $(id);
   if (!b) return;
   if (on) { b.dataset.t = b.textContent; b.innerHTML = '<span class="ld"></span>'; b.disabled = true; }
   else    { b.textContent = b.dataset.t || 'OK'; b.disabled = false; }
 }
-
+ 
 /* ── Auth ── */
 onAuthStateChanged(auth, user => {
   const isAdmin = ADMIN_UIDS.length === 0 || ADMIN_UIDS.includes(user?.uid);
@@ -559,12 +567,12 @@ onAuthStateChanged(auth, user => {
     $('login-gate').style.display = 'flex';
   }
 });
-
+ 
 function showLoginErr(msg) {
   $('lerr').textContent = msg;
   $('lerr').className = 'errbox on';
 }
-
+ 
 window.doLogin = async () => {
   $('lerr').className = 'errbox';
   ldBtn('lbtn', true);
@@ -583,9 +591,9 @@ window.doLogin = async () => {
     showLoginErr(msgs[e.code] || e.message);
   } finally { ldBtn('lbtn', false); }
 };
-
+ 
 window.doLogout = async () => { await signOut(auth); };
-
+ 
 /* ── Boot ── */
 async function boot() {
   startParkingsLive();
@@ -593,7 +601,7 @@ async function boot() {
   updateStats();
   renderDashRecent();
 }
-
+ 
 /* ── Navigation ── */
 window.goto = tab => {
   // Deactivate all
@@ -608,11 +616,11 @@ window.goto = tab => {
   if (tab === 'reservations') renderResTable();
   if (tab === 'users')        renderUserTable();
 };
-
+ 
 /* ── Parkings — live listener ── */
 function startParkingsLive() {
   try {
-    const q = query(collection(db, 'parkings'), orderBy('name'));
+    const q = query(collection(db, 'parkings'));
     S.unsub = onSnapshot(q, snap => {
       S.parkings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       updateStats();
@@ -622,7 +630,7 @@ function startParkingsLive() {
     }, _err => loadDemoParkings());
   } catch { loadDemoParkings(); }
 }
-
+ 
 function loadDemoParkings() {
   S.parkings = [
     {id:'p1',name:'Plaza Sol',    address:'Av. Vallarta 1234',          lat:20.6764,lng:-103.3820,totalSpots:20,availSpots:14,pricePerHour:20,hours:'6:00–22:00',type:'Cubierto',      active:true},
@@ -634,22 +642,44 @@ function loadDemoParkings() {
   ];
   updateStats(); renderDashTable(); renderPkTable();
 }
-
+ 
 /* ── Data loaders ── */
 async function loadReservations() {
   try {
-    const q = query(collection(db, 'reservations'), orderBy('createdAt', 'desc'));
-    S.reservations = (await getDocs(q)).docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch { S.reservations = []; }
+    const snap = await getDocs(collection(db, 'reservations'));
+    S.reservations = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    S.reservations.sort((a, b) => {
+      const ta = a.createdAt?.toMillis?.() || 0;
+      const tb = b.createdAt?.toMillis?.() || 0;
+      return tb - ta;
+    });
+  } catch(e) {
+    console.error('Lugaria Admin: error cargando reservas →', e.code, e.message);
+    S.reservations = [];
+  }
 }
-
+ 
 async function loadUsers() {
   try {
-    const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
-    S.users = (await getDocs(q)).docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch { S.users = []; }
+    // Sin orderBy para evitar requerir índice compuesto
+    const snap = await getDocs(collection(db, 'users'));
+    S.users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // Ordenar en memoria por fecha de creación (más reciente primero)
+    S.users.sort((a, b) => {
+      const ta = a.createdAt?.toMillis?.() || 0;
+      const tb = b.createdAt?.toMillis?.() || 0;
+      return tb - ta;
+    });
+    console.log(`Lugaria Admin: ${S.users.length} usuario(s) cargados desde Firestore`);
+  } catch(e) {
+    console.error('Lugaria Admin: error cargando usuarios →', e.code, e.message);
+    if(e.code === 'permission-denied') {
+      console.error('→ Las reglas de Firestore no permiten leer la colección users desde admin. Actualiza firestore.rules');
+    }
+    S.users = [];
+  }
 }
-
+ 
 /* ── Stats ── */
 function updateStats() {
   $('st-total').textContent = S.parkings.length;
@@ -657,7 +687,7 @@ function updateStats() {
   $('st-res').textContent   = S.reservations.filter(r => r.status === 'active').length;
   $('st-users').textContent = S.users.length;
 }
-
+ 
 /* ── Dashboard tables ── */
 function renderDashTable() {
   const t = $('dash-tbl');
@@ -677,7 +707,7 @@ function renderDashTable() {
     </tr>`;
   }).join('');
 }
-
+ 
 function renderDashRecent() {
   const t = $('recent-res');
   if (!S.reservations.length) { t.innerHTML = '<tr class="empt-row"><td colspan="5">Sin reservas aún</td></tr>'; return; }
@@ -691,7 +721,7 @@ function renderDashRecent() {
     <td><span class="bdg ${SC[r.status] || 'bact'}">${SL[r.status] || r.status || 'Activa'}</span></td>
   </tr>`).join('');
 }
-
+ 
 /* ── Parkings table ── */
 window.renderPkTable = () => {
   const q  = ($('pq')?.value || '').toLowerCase();
@@ -724,7 +754,7 @@ window.renderPkTable = () => {
     </tr>`;
   }).join('');
 };
-
+ 
 /* ── Reservations table ── */
 window.renderResTable = () => {
   const q = ($('rq')?.value || '').toLowerCase();
@@ -748,7 +778,7 @@ window.renderResTable = () => {
     </tr>`;
   }).join('');
 };
-
+ 
 /* ── Users table ── */
 window.renderUserTable = () => {
   const q = ($('uq')?.value || '').toLowerCase();
@@ -756,7 +786,16 @@ window.renderUserTable = () => {
     !q || (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)
   );
   const t = $('user-tbl');
-  if (!items.length) { t.innerHTML = '<tr class="empt-row"><td colspan="4">Sin usuarios registrados aún</td></tr>'; return; }
+  if (!items.length) {
+    t.innerHTML = `<tr class="empt-row"><td colspan="4" style="padding:20px;line-height:1.8">
+      Sin usuarios en Firestore.<br>
+      <span style="font-size:11px;color:var(--muted)">
+        Los usuarios solo aparecen aquí si se registraron desde la app (index.html).<br>
+        Los creados directamente en Firebase Console → Authentication no generan perfil en Firestore.
+      </span>
+    </td></tr>`;
+    return;
+  }
   t.innerHTML = items.map(u => `<tr>
     <td><strong>${u.name || '—'}</strong></td>
     <td>${u.email || '—'}</td>
@@ -764,7 +803,7 @@ window.renderUserTable = () => {
     <td>${fmtT(u.createdAt)}</td>
   </tr>`).join('');
 };
-
+ 
 /* ── Parking CRUD ── */
 function clearPkForm() {
   ['pk-name','pk-addr','pk-lat','pk-lng','pk-total','pk-avail','pk-price','pk-hours'].forEach(id => {
@@ -774,7 +813,7 @@ function clearPkForm() {
   $('pk-active').value = 'true';
   $('pkerr').className = 'errbox';
 }
-
+ 
 function openPkForm() {
   S.editPkId = null;
   $('pkfh2').textContent = 'Nuevo estacionamiento';
@@ -785,7 +824,7 @@ function openPkForm() {
   openM('pk-form');
 }
 window.openPkForm = openPkForm;
-
+ 
 window.editPk = id => {
   const pk = S.parkings.find(p => p.id === id);
   if (!pk) return;
@@ -807,7 +846,7 @@ window.editPk = id => {
     <button class="bsub" id="pk-sub" onclick="savePk()">Guardar cambios</button>`;
   openM('pk-form');
 };
-
+ 
 window.savePk = async () => {
   const name  = $('pk-name').value.trim();
   const addr  = $('pk-addr').value.trim();
@@ -816,7 +855,7 @@ window.savePk = async () => {
   const total = parseInt($('pk-total').value);
   const avail = parseInt($('pk-avail').value);
   const price = parseFloat($('pk-price').value);
-
+ 
   if (!name || !addr || isNaN(lat) || isNaN(lng) || isNaN(total) || isNaN(avail) || isNaN(price)) {
     $('pkerr').textContent = 'Completa todos los campos marcados con *';
     $('pkerr').className   = 'errbox on';
@@ -853,7 +892,7 @@ window.savePk = async () => {
     $('pkerr').className   = 'errbox on';
   } finally { ldBtn('pk-sub', false); }
 };
-
+ 
 /* ── Adjust availability ── */
 window.openAdjust = id => {
   const pk = S.parkings.find(p => p.id === id);
@@ -864,7 +903,7 @@ window.openAdjust = id => {
   $('adj-total').value         = pk.totalSpots;
   openM('adjust');
 };
-
+ 
 window.doAdjust = async () => {
   const avail = parseInt($('adj-avail').value);
   const total = parseInt($('adj-total').value);
@@ -881,7 +920,7 @@ window.doAdjust = async () => {
   } catch (e) { snk('Error: ' + e.message, 1); }
   finally { ldBtn('adj-sub', false); }
 };
-
+ 
 /* ── Delete parking ── */
 window.confirmDel = (id, name) => {
   S.delPkId = id;
@@ -897,7 +936,7 @@ window.doDelete = async () => {
   } catch (e) { snk('Error: ' + e.message, 1); }
   finally { ldBtn('del-sub', false); }
 };
-
+ 
 /* ── Modal helpers ── */
 window.openM  = n => { const el = $('modal-' + n); if (el) el.classList.add('open'); };
 window.closeM = n => { const el = $('modal-' + n); if (el) el.classList.remove('open'); };

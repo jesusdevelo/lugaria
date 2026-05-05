@@ -3,125 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lugaria — Cargar estacionamientos iniciales</title>
+<title>Lugaria — Cargar estacionamientos</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#07090f;--s1:#0e1118;--s2:#161b27;--s3:#1e2535;
-  --acc:#00e5a0;--acc2:#00c488;--gold:#f5c842;--red:#ff5b5b;--blue:#5b9fff;
+  --acc:#00e5a0;--gold:#f5c842;--red:#ff5b5b;--blue:#5b9fff;
   --text:#eef2ff;--muted:#7a85a3;--border:rgba(255,255,255,.07);
   --r:14px;--rsm:8px;--f:'Outfit',sans-serif;--fh:'Syne',sans-serif;
 }
 body{font-family:var(--f);background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{background:var(--s1);border:1px solid var(--border);border-radius:18px;width:100%;max-width:620px;overflow:hidden}
-.card-head{padding:24px 24px 0}
-.logo{font-family:var(--fh);font-size:20px;font-weight:800;margin-bottom:6px}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:18px;width:100%;max-width:600px;overflow:hidden}
+ 
+/* Header */
+.card-head{padding:24px 24px 16px}
+.logo{font-family:var(--fh);font-size:20px;font-weight:800;margin-bottom:4px}
 .lg{color:var(--acc)}.lw{color:var(--text)}
-h1{font-family:var(--fh);font-size:22px;font-weight:700;margin-bottom:6px}
-.sub{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px}
-.warn-box{background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.2);border-radius:var(--rsm);padding:11px 13px;font-size:12px;color:var(--gold);margin-bottom:16px;line-height:1.5}
-.info-box{background:rgba(91,159,255,.06);border:1px solid rgba(91,159,255,.15);border-radius:var(--rsm);padding:11px 13px;font-size:12px;color:var(--blue);margin-bottom:16px;line-height:1.6}
-.sep{height:1px;background:var(--border);margin:0 0 16px}
-
-/* Config section */
-.cfg{padding:0 24px 16px}
-.fg{margin-bottom:11px}
+h1{font-family:var(--fh);font-size:20px;font-weight:700;margin-bottom:5px}
+.sub{font-size:12px;color:var(--muted);line-height:1.5}
+.sep{height:1px;background:var(--border)}
+ 
+/* Login section */
+#login-section{padding:20px 24px 24px}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.step-num{width:18px;height:18px;border-radius:50%;background:var(--acc);color:#001a0d;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fg{margin-bottom:10px}
 .fg label{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}
 .fg input{width:100%;padding:10px 12px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);color:var(--text);font-size:13px;outline:none;transition:border-color .15s}
 .fg input:focus{border-color:var(--acc)}
 .fg input::placeholder{color:var(--muted)}
-
-/* Parking preview list */
-.pk-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.pk-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--s2);border-radius:var(--rsm);border:1px solid var(--border)}
-.pk-num{width:22px;height:22px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0}
+.errbox{background:rgba(255,91,91,.08);border:1px solid rgba(255,91,91,.2);border-radius:var(--rsm);padding:9px 11px;font-size:12px;color:var(--red);margin-bottom:10px;display:none}
+.errbox.on{display:block}
+.user-row{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);margin-bottom:12px}
+.uav{width:30px;height:30px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#001a0d;flex-shrink:0}
+.uname{font-size:13px;font-weight:600}
+.uemail{font-size:11px;color:var(--muted)}
+.badge-ok{padding:3px 8px;background:rgba(0,229,160,.1);color:var(--acc);border-radius:8px;font-size:10px;font-weight:700;margin-left:auto}
+ 
+/* Seed section */
+#seed-section{padding:0 24px 24px;display:none}
+.info-box{background:rgba(91,159,255,.06);border:1px solid rgba(91,159,255,.15);border-radius:var(--rsm);padding:10px 13px;font-size:12px;color:var(--blue);margin-bottom:14px;line-height:1.5}
+.pk-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.pk-row{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--s2);border-radius:var(--rsm);border:1px solid var(--border)}
+.pk-num{width:20px;height:20px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--muted);flex-shrink:0}
 .pk-info{flex:1;min-width:0}
-.pk-name{font-size:13px;font-weight:600}
-.pk-addr{font-size:11px;color:var(--muted)}
-.pk-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}
-.chip{padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600;background:var(--s3);color:var(--muted)}
+.pk-name{font-size:12px;font-weight:600}
+.pk-addr{font-size:10px;color:var(--muted)}
+.pk-chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.chip{padding:2px 6px;border-radius:7px;font-size:9px;font-weight:600;background:var(--s3);color:var(--muted)}
 .chip.g{background:rgba(0,229,160,.1);color:var(--acc)}
 .chip.b{background:rgba(91,159,255,.1);color:var(--blue)}
-.pk-status{font-size:11px;font-weight:700;flex-shrink:0}
-.st-wait{color:var(--muted)}
-.st-ok{color:var(--acc)}
-.st-err{color:var(--red)}
-.st-skip{color:var(--gold)}
-
+.pk-st{font-size:11px;font-weight:700;flex-shrink:0;min-width:60px;text-align:right}
+.st-wait{color:var(--muted)}.st-ok{color:var(--acc)}.st-err{color:var(--red)}.st-skip{color:var(--gold)}
+ 
 /* Progress */
-.progress-wrap{padding:0 24px 20px}
-.progress-bar-bg{height:6px;background:var(--s3);border-radius:3px;overflow:hidden;margin-bottom:8px}
-.progress-bar-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s ease;width:0%}
-.progress-text{font-size:12px;color:var(--muted);text-align:center}
-
+.prog-wrap{margin-bottom:12px;display:none}
+.prog-bg{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s ease;width:0}
+.prog-txt{font-size:11px;color:var(--muted);text-align:center}
+ 
+/* Result */
+.result{padding:12px 14px;border-radius:var(--rsm);font-size:12px;line-height:1.6;display:none;white-space:pre-line;margin-bottom:12px}
+.result.ok{background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.18);color:var(--acc)}
+.result.err{background:rgba(255,91,91,.07);border:1px solid rgba(255,91,91,.18);color:var(--red)}
+ 
 /* Buttons */
-.btn-wrap{padding:0 24px 24px;display:flex;gap:8px}
-.btn{flex:1;padding:12px;border:none;border-radius:var(--rsm);font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn-row{display:flex;gap:8px}
+.btn{flex:1;padding:11px;border:none;border-radius:var(--rsm);font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:6px}
 .btn:hover{opacity:.85}
-.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .btn-main{background:var(--acc);color:#001a0d}
 .btn-sec{background:var(--s2);color:var(--muted);border:1px solid var(--border);font-weight:500}
 .btn-sec:hover{color:var(--text)}
-.btn-danger{background:rgba(255,91,91,.1);color:var(--red);border:1px solid rgba(255,91,91,.2);font-weight:500}
-
-/* Result box */
-.result{padding:14px;margin:0 24px 20px;border-radius:var(--rsm);font-size:13px;display:none}
-.result.ok{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);color:var(--acc)}
-.result.err{background:rgba(255,91,91,.08);border:1px solid rgba(255,91,91,.2);color:var(--red)}
-
-/* Spinner */
-.sp{width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:#001a0d;border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0}
-.sp-w{border-top-color:var(--text)}
+.btn-sm{flex:none;padding:7px 13px;font-size:11px;font-weight:600;background:transparent;border:1px solid var(--border);border-radius:var(--rsm);color:var(--muted)}
+.btn-sm:hover{color:var(--red);border-color:rgba(255,91,91,.3)}
+.sp{width:14px;height:14px;border:2px solid rgba(0,0,0,.15);border-top-color:#001a0d;border-radius:50%;animation:spin .6s linear infinite}
+.sp-w{border:2px solid rgba(255,255,255,.2);border-top-color:var(--text)}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* Links */
-a{color:var(--blue)}
-code{background:var(--s3);padding:2px 5px;border-radius:4px;font-size:11px;font-family:monospace}
+code{background:var(--s3);padding:1px 5px;border-radius:4px;font-size:11px;font-family:monospace}
 </style>
 </head>
 <body>
 <div class="card">
+ 
+  <!-- Header -->
   <div class="card-head">
     <div class="logo"><span class="lg">Lug</span><span class="lw">aria</span></div>
-    <h1>Cargar estacionamientos</h1>
-    <p class="sub">Esta herramienta carga los 6 estacionamientos predeterminados de Guadalajara directo a tu base de datos Firestore. Solo necesitas hacerlo <strong>una vez</strong>.</p>
-    <div class="warn-box">
-      ⚠️ <strong>Antes de continuar:</strong> asegúrate de haber pegado tu <code>firebaseConfig</code> en este archivo (busca <code>TU_API_KEY</code> abajo). Si no, los datos no se guardarán.
-    </div>
-    <div class="info-box">
-      ℹ️ Si un estacionamiento con el mismo nombre ya existe en tu base de datos, se <strong>omitirá</strong> para no duplicar. Puedes correr este seed varias veces de forma segura.
-    </div>
+    <h1>Cargar estacionamientos iniciales</h1>
+    <p class="sub">Carga los 6 estacionamientos predeterminados de Guadalajara a tu Firestore. Solo necesitas hacerlo una vez.</p>
   </div>
-
   <div class="sep"></div>
-
-  <div class="cfg">
-    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Vista previa de los estacionamientos que se cargarán:</p>
-    <div class="pk-grid" id="pk-grid"></div>
+ 
+  <!-- STEP 1: Login -->
+  <div id="login-section">
+    <div class="step-label"><div class="step-num">1</div>Inicia sesión con tu cuenta de Lugaria</div>
+    <div class="errbox" id="lerr"></div>
+    <div id="logged-out">
+      <div class="fg"><label>Correo</label><input id="lem" type="email" placeholder="tucorreo@gmail.com" autocomplete="email"></div>
+      <div class="fg"><label>Contraseña</label><input id="lpw" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="btn-row">
+        <button class="btn btn-sec" onclick="window.open('index.html','_blank')" style="flex:none;padding:10px 14px;font-size:12px">Ir a la app</button>
+        <button class="btn btn-main" id="lbtn" onclick="doLogin()">Iniciar sesión</button>
+      </div>
+    </div>
+    <div id="logged-in" style="display:none">
+      <div class="user-row">
+        <div class="uav" id="uav">?</div>
+        <div>
+          <div class="uname" id="uname">—</div>
+          <div class="uemail" id="uemail">—</div>
+        </div>
+        <div class="badge-ok">✓ Autenticado</div>
+        <button class="btn-sm" onclick="doLogout()">Salir</button>
+      </div>
+      <div class="sep" style="margin-bottom:16px"></div>
+      <div class="step-label"><div class="step-num">2</div>Cargar estacionamientos</div>
+      <!-- move seed section here when logged in -->
+      <div id="seed-inline"></div>
+    </div>
   </div>
-
-  <div class="progress-wrap" id="progress-wrap" style="display:none">
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="pbar"></div></div>
-    <div class="progress-text" id="ptext">Iniciando…</div>
-  </div>
-
-  <div class="result" id="result"></div>
-
-  <div class="btn-wrap">
-    <button class="btn btn-sec" onclick="window.open('admin.html','_self')">← Admin</button>
-    <button class="btn btn-main" id="btn-seed" onclick="runSeed()">
-      <span>🚀 Cargar estacionamientos</span>
-    </button>
-  </div>
+ 
 </div>
-
+ 
 <script type="module">
-import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc,
-         getDocs, query, where,
-         serverTimestamp }                       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+import { initializeApp }                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword,
+         signOut, onAuthStateChanged,
+         browserLocalPersistence, setPersistence }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs,
+         query, where, serverTimestamp }             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+ 
 /* ══════════════════════════════════════════════
    🔥 PEGA AQUÍ TU FIREBASE CONFIG
    (el mismo que usas en index.html y admin.html)
@@ -135,219 +147,175 @@ const firebaseConfig = {
   appId: "1:456373137134:web:f7d150c367f3ebbdeb4dff",
   measurementId: "G-K1Z09169FH"
 };
-
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
-
+ 
+/* ══════════════════════════════════════════════════
+   UIDs con acceso de admin.
+   Déjalo vacío [] durante desarrollo — cualquier
+   cuenta tendrá acceso. Agrega UIDs reales antes
+   de hacer deploy en producción.
+   ══════════════════════════════════════════════════ */
+const ADMIN_UIDS = ["UEJ0LyXewXXUd7Il4FZq5ffeE8u2"];
+ 
 /* ══════════════════════════════════════════════
-   📍 ESTACIONAMIENTOS PREDETERMINADOS — GDL
-   Puedes agregar, quitar o editar los que quieras
-   antes de cargar.
+   📍 ESTACIONAMIENTOS — edítalos a tu gusto
    ══════════════════════════════════════════════ */
 const PARKINGS = [
-  {
-    name:         'Plaza Sol',
-    address:      'Av. Vallarta 1234, Col. Americana, Guadalajara',
-    lat:          20.6764,
-    lng:          -103.3820,
-    totalSpots:   20,
-    availSpots:   20,
-    pricePerHour: 20,
-    hours:        '6:00–22:00',
-    type:         'Cubierto',
-    city:         'Guadalajara',
-    active:       true,
-  },
-  {
-    name:         'Centro GDL',
-    address:      'Morelos 456, Centro Histórico, Guadalajara',
-    lat:          20.6596,
-    lng:          -103.3496,
-    totalSpots:   30,
-    availSpots:   30,
-    pricePerHour: 15,
-    hours:        '7:00–21:00',
-    type:         'Al aire libre',
-    city:         'Guadalajara',
-    active:       true,
-  },
-  {
-    name:         'Chapultepec',
-    address:      'Av. Chapultepec 789, Col. Americana, Guadalajara',
-    lat:          20.6731,
-    lng:          -103.3744,
-    totalSpots:   50,
-    availSpots:   50,
-    pricePerHour: 18,
-    hours:        '6:00–23:00',
-    type:         'Cubierto',
-    city:         'Guadalajara',
-    active:       true,
-  },
-  {
-    name:         'Puerta Norte',
-    address:      'Av. Américas 2100, Col. Providencia, Guadalajara',
-    lat:          20.6893,
-    lng:          -103.3641,
-    totalSpots:   80,
-    availSpots:   80,
-    pricePerHour: 12,
-    hours:        '24 horas',
-    type:         'Al aire libre',
-    city:         'Guadalajara',
-    active:       true,
-  },
-  {
-    name:         'Mercado TJ',
-    address:      'Independencia 300, Tlaquepaque, Jalisco',
-    lat:          20.6412,
-    lng:          -103.3124,
-    totalSpots:   25,
-    availSpots:   25,
-    pricePerHour: 10,
-    hours:        '8:00–20:00',
-    type:         'Al aire libre',
-    city:         'Guadalajara',
-    active:       true,
-  },
-  {
-    name:         'Andares',
-    address:      'Blvd. Puerta de Hierro 4965, Zapopan, Jalisco',
-    lat:          20.7255,
-    lng:          -103.4222,
-    totalSpots:   200,
-    availSpots:   200,
-    pricePerHour: 25,
-    hours:        '10:00–22:00',
-    type:         'Cubierto',
-    city:         'Guadalajara',
-    active:       true,
-  },
+  { name:'Plaza Sol',    address:'Av. Vallarta 1234, Col. Americana, Guadalajara',   lat:20.6764, lng:-103.3820, totalSpots:20,  availSpots:20,  pricePerHour:20, hours:'6:00–22:00',  type:'Cubierto',      city:'Guadalajara', active:true },
+  { name:'Centro GDL',   address:'Morelos 456, Centro Histórico, Guadalajara',       lat:20.6596, lng:-103.3496, totalSpots:30,  availSpots:30,  pricePerHour:15, hours:'7:00–21:00',  type:'Al aire libre', city:'Guadalajara', active:true },
+  { name:'Chapultepec',  address:'Av. Chapultepec 789, Col. Americana, Guadalajara', lat:20.6731, lng:-103.3744, totalSpots:50,  availSpots:50,  pricePerHour:18, hours:'6:00–23:00',  type:'Cubierto',      city:'Guadalajara', active:true },
+  { name:'Puerta Norte', address:'Av. Américas 2100, Col. Providencia, Guadalajara', lat:20.6893, lng:-103.3641, totalSpots:80,  availSpots:80,  pricePerHour:12, hours:'24 horas',    type:'Al aire libre', city:'Guadalajara', active:true },
+  { name:'Mercado TJ',   address:'Independencia 300, Tlaquepaque, Jalisco',          lat:20.6412, lng:-103.3124, totalSpots:25,  availSpots:25,  pricePerHour:10, hours:'8:00–20:00',  type:'Al aire libre', city:'Guadalajara', active:true },
+  { name:'Andares',      address:'Blvd. Puerta de Hierro 4965, Zapopan, Jalisco',    lat:20.7255, lng:-103.4222, totalSpots:200, availSpots:200, pricePerHour:25, hours:'10:00–22:00', type:'Cubierto',      city:'Guadalajara', active:true },
 ];
-
-/* ── Helpers ── */
-const $     = id => document.getElementById(id);
-const setP  = (pct, msg) => {
-  $('pbar').style.width  = pct + '%';
-  $('ptext').textContent = msg;
-};
-const setRow = (i, cls, label) => {
-  const el = document.getElementById('st-' + i);
-  if (el) { el.className = 'pk-status ' + cls; el.textContent = label; }
-};
-
-/* ── Render preview ── */
-function renderPreview() {
-  const grid = $('pk-grid');
-  grid.innerHTML = PARKINGS.map((p, i) => `
-    <div class="pk-row">
-      <div class="pk-num">${i + 1}</div>
-      <div class="pk-info">
-        <div class="pk-name">${p.name}</div>
-        <div class="pk-addr">${p.address}</div>
-        <div class="pk-chips">
-          <span class="chip g">${p.totalSpots} lugares</span>
-          <span class="chip b">$${p.pricePerHour}/hr</span>
-          <span class="chip">${p.type}</span>
-          <span class="chip">${p.hours}</span>
-        </div>
-      </div>
-      <div class="pk-status st-wait" id="st-${i}">Pendiente</div>
-    </div>
-  `).join('');
+ 
+/* ── Init ── */
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+ 
+// Mantener sesión activa entre recargas
+setPersistence(auth, browserLocalPersistence).catch(() => {});
+ 
+const $    = id => document.getElementById(id);
+const ini  = n  => (n||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+ 
+function ldBtn(id, on) {
+  const b = $(id); if (!b) return;
+  if (on) { b.dataset.t = b.innerHTML; b.innerHTML = '<span class="sp"></span>'; b.disabled = true; }
+  else    { b.innerHTML = b.dataset.t || 'OK'; b.disabled = false; }
 }
-renderPreview();
-
-/* ── Seed function ── */
+ 
+/* ── Auth observer ── */
+onAuthStateChanged(auth, user => {
+  if (user) {
+    $('logged-out').style.display = 'none';
+    $('logged-in').style.display  = 'block';
+    $('lerr').className = 'errbox';
+    $('uav').textContent    = ini(user.displayName || user.email);
+    $('uname').textContent  = user.displayName || 'Usuario';
+    $('uemail').textContent = user.email;
+    renderSeed();
+  } else {
+    $('logged-out').style.display = 'block';
+    $('logged-in').style.display  = 'none';
+    $('seed-inline').innerHTML    = '';
+  }
+});
+ 
+/* ── Login / Logout ── */
+window.doLogin = async () => {
+  $('lerr').className = 'errbox';
+  ldBtn('lbtn', true);
+  try {
+    const e = $('lem').value.trim(), p = $('lpw').value;
+    if (!e || !p) throw new Error('Escribe tu correo y contraseña');
+    await signInWithEmailAndPassword(auth, e, p);
+  } catch(err) {
+    const msgs = {
+      'auth/user-not-found':    'Correo no registrado',
+      'auth/wrong-password':    'Contraseña incorrecta',
+      'auth/invalid-credential':'Correo o contraseña incorrectos',
+      'auth/invalid-email':     'Correo inválido',
+      'auth/too-many-requests': 'Demasiados intentos, espera un momento',
+    };
+    $('lerr').textContent = msgs[err.code] || err.message;
+    $('lerr').className   = 'errbox on';
+  } finally { ldBtn('lbtn', false); }
+};
+window.doLogout = () => signOut(auth);
+ 
+/* ── Render seed UI ── */
+function renderSeed() {
+  $('seed-inline').innerHTML = `
+    <div class="info-box">
+      ℹ️ Si un estacionamiento con el mismo nombre ya existe, se <strong>omitirá</strong> para no duplicar. Es seguro correr el seed varias veces.
+    </div>
+    <div class="pk-grid" id="pk-grid">
+      ${PARKINGS.map((p,i) => `
+        <div class="pk-row">
+          <div class="pk-num">${i+1}</div>
+          <div class="pk-info">
+            <div class="pk-name">${p.name}</div>
+            <div class="pk-addr">${p.address}</div>
+            <div class="pk-chips">
+              <span class="chip g">${p.totalSpots} lugares</span>
+              <span class="chip b">$${p.pricePerHour}/hr</span>
+              <span class="chip">${p.type}</span>
+              <span class="chip">${p.hours}</span>
+            </div>
+          </div>
+          <div class="pk-st st-wait" id="st-${i}">Pendiente</div>
+        </div>`).join('')}
+    </div>
+    <div class="prog-wrap" id="prog-wrap">
+      <div class="prog-bg"><div class="prog-fill" id="pbar"></div></div>
+      <div class="prog-txt" id="ptxt">Iniciando…</div>
+    </div>
+    <div class="result" id="result"></div>
+    <div class="btn-row">
+      <button class="btn btn-sec" onclick="window.open('admin.html','_self')">← Admin</button>
+      <button class="btn btn-main" id="btn-seed" onclick="runSeed()">🚀 Cargar estacionamientos</button>
+    </div>`;
+}
+ 
+/* ── Seed ── */
 window.runSeed = async () => {
   const btn = $('btn-seed');
   btn.disabled = true;
   btn.innerHTML = '<span class="sp"></span><span>Cargando…</span>';
-  $('progress-wrap').style.display = 'block';
+  $('prog-wrap').style.display = 'block';
   $('result').style.display = 'none';
-
-  // Check if firebaseConfig is still placeholder
-  if (firebaseConfig.apiKey === 'TU_API_KEY') {
-    showResult('err', '❌ Primero pega tu firebaseConfig en este archivo. Busca "TU_API_KEY" y reemplázalo con tus datos de Firebase Console → Project Settings → Web App.');
-    resetBtn();
-    return;
-  }
-
+ 
+  // Reset all rows
+  PARKINGS.forEach((_,i) => {
+    const el = $('st-'+i); if(el){ el.className='pk-st st-wait'; el.textContent='Pendiente'; }
+  });
+ 
   let ok = 0, skipped = 0, failed = 0;
-  const total = PARKINGS.length;
-
-  for (let i = 0; i < total; i++) {
+ 
+  for (let i = 0; i < PARKINGS.length; i++) {
     const pk = PARKINGS[i];
-    setP(Math.round((i / total) * 90), `Procesando ${i + 1} de ${total}: ${pk.name}…`);
-    setRow(i, 'st-wait', '⏳');
-
+    $('pbar').style.width  = Math.round((i / PARKINGS.length) * 90) + '%';
+    $('ptxt').textContent  = `Procesando ${i+1} de ${PARKINGS.length}: ${pk.name}…`;
+    const stEl = $('st-'+i);
+    if (stEl) { stEl.className='pk-st st-wait'; stEl.textContent='⏳'; }
+ 
     try {
-      // Check if a parking with the same name already exists
-      const existing = await getDocs(
-        query(collection(db, 'parkings'), where('name', '==', pk.name))
-      );
-
+      const existing = await getDocs(query(collection(db,'parkings'), where('name','==',pk.name)));
       if (!existing.empty) {
-        setRow(i, 'st-skip', '⏭ Ya existe');
+        if(stEl){ stEl.className='pk-st st-skip'; stEl.textContent='⏭ Ya existe'; }
         skipped++;
       } else {
-        await addDoc(collection(db, 'parkings'), {
-          ...pk,
-          createdAt:  serverTimestamp(),
-          updatedAt:  serverTimestamp(),
-        });
-        setRow(i, 'st-ok', '✅ Cargado');
+        await addDoc(collection(db,'parkings'), { ...pk, createdAt:serverTimestamp(), updatedAt:serverTimestamp() });
+        if(stEl){ stEl.className='pk-st st-ok'; stEl.textContent='✅ Cargado'; }
         ok++;
       }
-    } catch (e) {
-      setRow(i, 'st-err', '❌ Error');
-      console.error('Error cargando ' + pk.name + ':', e);
+    } catch(e) {
+      if(stEl){ stEl.className='pk-st st-err'; stEl.textContent='❌ Error'; }
+      console.error('Error cargando '+pk.name+':', e.code, e.message);
       failed++;
     }
-
-    // Small delay so the UI updates are visible
-    await new Promise(r => setTimeout(r, 300));
+ 
+    await new Promise(r => setTimeout(r, 280));
   }
-
-  setP(100, 'Completado');
-
-  // Summary
+ 
+  $('pbar').style.width = '100%';
+  $('ptxt').textContent = 'Completado';
+ 
   const parts = [];
-  if (ok)      parts.push(`✅ ${ok} cargado${ok !== 1 ? 's' : ''} correctamente`);
-  if (skipped) parts.push(`⏭ ${skipped} omitido${skipped !== 1 ? 's' : ''} (ya existían)`);
-  if (failed)  parts.push(`❌ ${failed} falló — revisa la consola del navegador`);
-
-  const allOk = failed === 0;
-  showResult(
-    allOk ? 'ok' : 'err',
-    parts.join(' · ') + (allOk && ok > 0
-      ? '\n\nYa puedes abrir la app y verlos en el mapa. Recuerda que los disponSpots inician en el máximo — ajústalos desde el panel admin según la ocupación real.'
-      : '\n\nSi el error dice "Missing or insufficient permissions", asegúrate de haber publicado las reglas de Firestore (firestore.rules).')
-  );
-
-  btn.innerHTML = ok > 0
-    ? '✅ ¡Listo! Ver en admin →'
-    : '🔄 Reintentar';
-  btn.onclick = ok > 0
-    ? () => window.open('admin.html', '_self')
-    : () => { resetBtn(); runSeed(); };
-  btn.disabled = false;
+  if (ok)      parts.push(`✅ ${ok} cargado${ok!==1?'s':''} correctamente`);
+  if (skipped) parts.push(`⏭ ${skipped} omitido${skipped!==1?'s':''} (ya existían)`);
+  if (failed)  parts.push(`❌ ${failed} con error — revisa la consola (F12)`);
+ 
+  const res = $('result');
+  res.className = 'result ' + (failed===0?'ok':'err');
+  res.style.display = 'block';
+  res.textContent = parts.join(' · ') + (ok>0 ? '\n\nYa puedes ver los estacionamientos en el mapa. Ajusta la disponibilidad real desde el panel admin.' : failed>0 ? '\n\nSi el error es "Missing or insufficient permissions":\n1. Verifica que las reglas de Firestore estén publicadas\n2. Verifica que tu cuenta tenga acceso al proyecto' : '');
+ 
+  btn.innerHTML = ok>0 ? '✅ Ver en admin →' : '🔄 Reintentar';
+  btn.onclick   = ok>0 ? () => window.open('admin.html','_self') : () => runSeed();
+  btn.disabled  = false;
 };
-
-function showResult(type, msg) {
-  const el = $('result');
-  el.className = 'result ' + type;
-  el.style.display = 'block';
-  el.style.whiteSpace = 'pre-line';
-  el.textContent = msg;
-}
-
-function resetBtn() {
-  const btn = $('btn-seed');
-  btn.disabled = false;
-  btn.innerHTML = '<span>🚀 Cargar estacionamientos</span>';
-  btn.onclick = window.runSeed;
-}
 </script>
 </body>
 </html>
