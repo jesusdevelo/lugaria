@@ -45,6 +45,7 @@ const firebaseConfig = {
   appId:             "1:1234...:web:abc..."
 };
 ```
+<<<<<<< HEAD
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -65,6 +66,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+=======
+>>>>>>> 45649d3 (ya funciona)
 
 ---
 

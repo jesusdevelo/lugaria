@@ -472,10 +472,14 @@ import { getFirestore, collection, addDoc, getDocs,
          query, orderBy, where, onSnapshot,
          serverTimestamp }                           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
  
+<<<<<<< HEAD
 /* ══════════════════════════════════════════════════
    🔥 PEGA AQUÍ TU FIREBASE CONFIG
    Debe ser IDÉNTICO al de index.html
    ══════════════════════════════════════════════════ */
+=======
+
+>>>>>>> 45649d3 (ya funciona)
 const firebaseConfig = {
   apiKey: "AIzaSyB9b5kGcIAXltYazwKkrA3FW3Z3DwLMDI0",
   authDomain: "lugaria-guadalajara-9505e.firebaseapp.com",
@@ -486,12 +490,16 @@ const firebaseConfig = {
   measurementId: "G-K1Z09169FH"
 };
  
+<<<<<<< HEAD
 /* ══════════════════════════════════════════════════
    UIDs con acceso de admin.
    Déjalo vacío [] durante desarrollo — cualquier
    cuenta tendrá acceso. Agrega UIDs reales antes
    de hacer deploy en producción.
    ══════════════════════════════════════════════════ */
+=======
+
+>>>>>>> 45649d3 (ya funciona)
 const ADMIN_UIDS = ["UEJ0LyXewXXUd7Il4FZq5ffeE8u2"];
  
 const fbApp = initializeApp(firebaseConfig);
@@ -625,7 +633,10 @@ function startParkingsLive() {
       S.parkings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       updateStats();
       renderDashTable();
+<<<<<<< HEAD
       // Refresh parkings view if active
+=======
+>>>>>>> 45649d3 (ya funciona)
       if ($('v-parkings').classList.contains('active')) renderPkTable();
     }, _err => loadDemoParkings());
   } catch { loadDemoParkings(); }
@@ -661,10 +672,15 @@ async function loadReservations() {
  
 async function loadUsers() {
   try {
+<<<<<<< HEAD
     // Sin orderBy para evitar requerir índice compuesto
     const snap = await getDocs(collection(db, 'users'));
     S.users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     // Ordenar en memoria por fecha de creación (más reciente primero)
+=======
+    const snap = await getDocs(collection(db, 'users'));
+    S.users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+>>>>>>> 45649d3 (ya funciona)
     S.users.sort((a, b) => {
       const ta = a.createdAt?.toMillis?.() || 0;
       const tb = b.createdAt?.toMillis?.() || 0;

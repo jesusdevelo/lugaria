@@ -30,5 +30,10 @@ The SDK provides a number of features to make crash reports more actionable.
 
 To learn how to customize crash reports and add additional debugging data, consult the documentation for your platform.
 
+<<<<<<< HEAD
 *   **Android**: [Customize Crash Reports for Android](https://firebase.google.com/docs/crashlytics/android/customize-crash-reports)
 *   **iOS**: [Customize Crash Reports for Apple Platforms](https://firebase.google.com/docs/crashlytics/ios/customize-crash-reports)
+=======
+*   **Android**: [Customize Crash Reports for Android](https://firebase.google.com/docs/crashlytics/android/customize-crash-reports.md)
+*   **iOS**: [Customize Crash Reports for Apple Platforms](https://firebase.google.com/docs/crashlytics/ios/customize-crash-reports.md)
+>>>>>>> 45649d3 (ya funciona)

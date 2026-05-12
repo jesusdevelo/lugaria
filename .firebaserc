@@ -1,5 +1,9 @@
 {
   "projects": {
+<<<<<<< HEAD
     "default": "lugaria-guadalajara"
+=======
+    "default": "lugaria-guadalajara-9505e"
+>>>>>>> 45649d3 (ya funciona)
   }
 }

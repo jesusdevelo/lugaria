@@ -32,7 +32,11 @@ service cloud.firestore {
       allow update: if request.auth != null
                     && resource.data.userId == request.auth.uid
                     && request.resource.data.diff(resource.data).affectedKeys()
+<<<<<<< HEAD
                        .hasOnly(['status']);
+=======
+                       .hasOnly(['status','cancelledAt']);
+>>>>>>> 45649d3 (ya funciona)
       allow delete: if false;
     }
   }
